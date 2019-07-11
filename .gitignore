@@ -32,3 +32,6 @@ Temporary Items
 
 ### Project
 .idea
+shell.php
+web/index.php
+config/autoload.php
