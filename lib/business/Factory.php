@@ -23,9 +23,10 @@ class Factory {
      * dynamic create object
      * @param string $class
      * @param string $alias
+	 * @param bool $ns
      * @return SingleDAO | mixed
      */
-    public static function create($class, $alias=null)
+    public static function create($class, $alias=null, $ns=true)
     {
         if (null === $alias) {
             $alias = $class;
@@ -39,24 +40,25 @@ class Factory {
                     $dao = new SingleDAO($dbConfig[$key], $key);
                     self::$objects[$alias] = $dao;
                 } else {
-                    self::loadClass($class, $alias);
+                    self::loadClass($class, $alias, $ns);
                 }
             } else {
-                self::loadClass($class, $alias);
+                self::loadClass($class, $alias, $ns);
             }
         }
 
         return self::$objects[$alias];
     }
 
-    /**
-     * 加载类
-     * @param $class
-     * @param $alias
-     */
-    private static function loadClass($class, $alias)
-    {
-        if (strpos($class, '\\')){
+	/**
+	 * 加载类
+	 * @param $class
+	 * @param $alias
+	 * @param bool $ns
+	 */
+	private static function loadClass($class, $alias, $ns = true)
+	{
+		if ($ns && strpos($class, '\\')){
             self::$objects[$alias] = new $class();
         }
         $autoConfig = App::$base->config->get('namespace', 'autoload');

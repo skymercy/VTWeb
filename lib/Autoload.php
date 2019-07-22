@@ -58,7 +58,8 @@ class Autoload
             self::$loaders = [];
             self::getLoads(__DIR__, 'biny\\lib\\');
             self::getLoads(App::$extends_root);
-            self::getLoads(App::$app_root. DS . "controller", 'app\\controller\\');
+//            self::getLoads(App::$app_root. DS . "controller", 'app\\controller\\');
+			self::getRecursionLoads(App::$app_root. DS . "controller", App::$app_root. DS . "controller", 'app\\controller\\');
             self::getLoads(App::$app_root. DS . "shell", 'app\\shell\\');
             self::getLoads(App::$app_root. DS . "service", 'app\\service\\');
             self::getLoads(App::$app_root. DS . "dao", 'app\\dao\\');
@@ -82,6 +83,26 @@ class Autoload
         }
         return self::$loaders;
     }
+	
+	private static function getRecursionLoads($root, $path, $ns = '') {
+		foreach (glob($path . DS . '*') as $file) {
+			if (is_dir($file)) {
+				self::getRecursionLoads($root, $file, $ns);
+			} else {
+				$nsPath = trim(str_replace($root,'', $file),DS);
+				$nsNames = explode(DS, $nsPath);
+				$nsNames = array_slice($nsNames, 0, count($nsNames)-1);
+				$subNs = '';
+				if (count($nsNames) > 0) {
+					$subNs = implode($nsNames, '\\') . '\\';
+				}
+				$name = explode(DS, $file);
+				$class = $subNs . str_replace('.php', '', end($name));
+				self::$loaders['namespace'][$class] = $ns .  $class;
+				self::$loaders['file'][$ns . $class] = $file;
+			}
+		}
+	}
 
     /**
      * 获取所有类文件
@@ -126,4 +147,19 @@ class Autoload
             throw new BinyException(1003, [$class]);
         }
     }
+	
+	
+	/**
+	 * 检查类是否定义
+	 * @param $class
+	 * @return bool
+	 */
+	public static function checkClass($class) {
+		$autoConfig = App::$base->config->get('namespace', 'autoload');
+		if (!isset($autoConfig[$class])){
+			$config = self::loading();
+			$autoConfig = $config['namespace'];
+		}
+		return isset($autoConfig[$class]) ? true : false;
+	}
 }

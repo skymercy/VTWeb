@@ -72,7 +72,8 @@ class Router {
         }
         $module = isset($pathInfo[0]) ? $pathInfo[0] : null;
         $method = isset($pathInfo[1]) ? $pathInfo[1] : null;
-        return [$module, $method];
+		$extRouter = isset($pathInfo[2]) ? $pathInfo[2] : null;
+		return [$module, $method, $extRouter];
     }
 
     /**
@@ -120,13 +121,14 @@ class Router {
     public function router()
     {
         if ($pathInfo = $this->getRouterInfo()){
-            List($module, $method) = $pathInfo;
+            List($module, $method, $extRouter) = $pathInfo;
             $module = $module ?: $this->routerInfo['base_action'];
         } else {
             $module = $this->routerInfo['base_action'];
             $method = null;
+            $extRouter = null;
         }
-        Request::create($module, $method);
+        Request::create($module, $method, $extRouter);
     }
 
     /**

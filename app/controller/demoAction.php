@@ -1,6 +1,7 @@
 <?php
 namespace app\controller;
 use App;
+use app\controller\base\baseAction;
 use app\dao\baseDAO;
 use app\dao\userDAO;
 use biny\lib\Event;

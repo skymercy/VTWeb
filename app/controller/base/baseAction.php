@@ -1,5 +1,6 @@
 <?php
-namespace app\controller;
+namespace app\controller\base;
+
 use biny\lib\Action;
 use biny\lib\Response;
 use App;

@@ -29,17 +29,26 @@ class Request {
      * @var null|Request
      */
     private static $_instance = null;
+	
+	
+	//===Start of 扩展字段
+	private $root = '';
+	private $routerMethod=null;
+	private $extRouter = null;
+	//===End of 扩展字段
+	
 
     /**
      * 单例模式
      * @param $module
      * @param null $method
+	 * @param null $extRouter
      * @return null|Request
      */
-    public static function create($module, $method=null)
+    public static function create($module, $method=null, $extRouter=null)
     {
         if (NULL === self::$_instance){
-            self::$_instance = new self($module, $method);
+            self::$_instance = new self($module, $method, $extRouter);
         }
         return self::$_instance;
     }
@@ -55,12 +64,14 @@ class Request {
         return self::$_instance;
     }
 
-    private function __construct($module, $method=null)
+    private function __construct($module, $method=null, $extRouter=null)
     {
         $this->config = App::$base->config->get('request');
         $this->module = $module;
         $this->method = $method ?: 'index';
         $this->csrfToken = $this->getCookie($this->config['csrfToken']);
+        $this->routerMethod = $method;
+        $this->extRouter = $extRouter;
     }
 
     /**
@@ -144,6 +155,13 @@ class Request {
     {
         return $this->csrfToken;
     }
+	
+	/**
+	 * @return string
+	 */
+	public function getRoot() {
+		return $this->root;
+	}
 
     /**
      * 获取随机字符串
@@ -233,7 +251,25 @@ class Request {
                 if (!preg_match("/^[\\w_]+$/", $this->module)){
                     throw new BinyException(2001, $this->module."Action");
                 }
-                $this->action = Factory::create($this->module."Action");
+				//优先检查三级路由
+				$routerConfig = App::$base->config->get('router');
+	
+				$rootAction = is_null($this->routerMethod) ?
+					$this->module . '\\' . $routerConfig['base_action'] . 'Action'
+					: $this->module . '\\' . $this->method . 'Action';
+	
+				if (Autoload::checkClass($rootAction)) {
+					$this->root = $this->module;
+					$this->module =  is_null($this->routerMethod) ? $routerConfig['base_action'] : $this->method;
+					$this->method = $this->extRouter ? $this->extRouter : 'index';
+				}
+	
+				$class = empty($this->root) ? $this->module . 'Action' : $this->root . "\\" . $this->module . 'Action';
+				/**@var Action $this->action */
+				$this->action = Factory::create($class, null, false);
+				$this->action->reqRoot = $this->root;
+				$this->action->reqModule = $this->module;
+				$this->action->reqMethod = $this->method;
             }
             return $this->action;
         } else {
@@ -292,6 +328,14 @@ class Request {
     {
         return $this->header('X_REQUESTED_WITH') === 'XMLHttpRequest';
     }
+	
+	/**
+	 * 是否POST请求
+	 * @return bool
+	 */
+	public function isPost() {
+		return strtoupper($_SERVER['REQUEST_METHOD']) === 'POST';
+	}
 
     /**
      * @param bool $query
@@ -490,4 +534,8 @@ class Request {
         header("Location:$url");
         exit();
     }
+	
+	public function setOrigin($origin = '*') {
+		header("Access-Control-Allow-Origin: {$origin}");
+	}
 }
