@@ -25,6 +25,10 @@ class baseDAO extends SingleDAO
             $this->cacheKey = sprintf($config['pkCache'], substr(get_called_class(), 0, -3));
         }
     }
+	
+	public static function newInstance() {
+		return new static();
+	}
 
     /**
      * 获取PK
