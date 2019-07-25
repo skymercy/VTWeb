@@ -1,12 +1,13 @@
 <?php
 return array(
     'database' => array(
-        'host'     => '127.0.0.1',
-        'database' => 'Biny',
-        'user'     => 'root',
-        'password' => 'root',
-        'encode' => 'utf8',
-        'port' => 3306,
+		'host'     => '192.168.1.103',
+		'database' => 'db_vtweb',
+		'user'     => 'root',
+		'password' => 'u79Wlaozhou',
+		'encode' => 'utf8mb4',
+		'port' => 3306,
+		'keep-alive' => true,
     ),
     'slaveDb' => array(
         'host'     => '127.0.0.1',
@@ -21,9 +22,8 @@ return array(
         'port' => 12121
     ),
     'redis' => array(
-        'host' => 'localhost',
-        'port' => 6379,
-//        'client' => 'predis', // predis
-//        'persistent' => true, // predis
+		'host'     => '192.168.1.103',
+		'port' => 6379,
+		'keep-alive' => true,
     ),
 );

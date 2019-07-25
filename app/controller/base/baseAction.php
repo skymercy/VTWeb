@@ -17,10 +17,26 @@ function CheckSubstrs($substrs,$text){
 
 /**
  * Base action
+ *
+ * @property app\dao\userDAO $userDAO
+ * @property app\dao\studentDAO $studentDAO
+ * @property app\dao\teacherDAO $teacherDAO
+ *
  */
 class baseAction extends Action
 {
 	protected $_csk = null;
+	protected static $_tplRoot = null;
+	protected static $_webRoot = null;
+	protected static $_requestRoot = null;
+	protected static $_routerRoot = null;
+	
+	protected $breadcrumbs = [];
+	protected $searchData = [];
+	
+	public function init() {
+	
+	}
 	
     /**
      * @param $view
@@ -31,9 +47,17 @@ class baseAction extends Action
     public function display($view, $array=array(), $objects=array())
     {
         $objects = array_merge(array(
-            'webRoot' => App::$base->app_config->get('webRoot'),
+            'webRoot' => $this->webRoot(),
+			'routerRoot' => $this->routerRoot(),
+			'tplRoot' => $this->tplRoot(),
+			'requestRoot' => $this->requestRoot(),
 			'isMobile' => $this->isMobile(),
 			'csk' => $this->_csk,
+			'breadcrumbs' => $this->breadcrumbs,
+			'sidebar' => [
+				"{$this->reqModule}-{$this->reqMethod}" => true,
+				"{$this->reqModule}" => true,
+			],
         ), $objects);
         return parent::display($view, $array, $objects);
     }
@@ -55,16 +79,68 @@ class baseAction extends Action
 		}
 	}
 	
+	public function setBreadcrumb($name, $active = false) {
+		$this->breadcrumbs[] = ['name'=>$name,'active'=>$active];
+	}
+	
 	public static function request() {
 		return App::$base->request;
 	}
 	
+	public static function redirectToLoginPage() {
+		self::request()->redirect('/login');
+	}
+	
+	public static function redirectToManageIndexPage() {
+		self::request()->redirect('/manage');
+	}
+	
+	public static function redirectToStudentIndexPage() {
+		self::request()->redirect('/');
+	}
+	
+	public static function redirectToTeacherIndexPage() {
+		self::request()->redirect('/teacher');
+	}
+	
 	public function webRoot() {
-		return App::$base->app_config->get('webRoot');
+    	if (self::$_webRoot == null) {
+    		self::$_webRoot = App::$base->app_config->get('webRoot');
+		}
+		return self::$_webRoot;
+	}
+	
+	public function requestRoot() {
+    	if (self::$_requestRoot == null) {
+    		self::$_requestRoot = self::request()->getRoot();
+		}
+		return self::$_requestRoot;
+	}
+	
+	public function routerRoot() {
+    	if (self::$_routerRoot == null) {
+    		if ($this->requestRoot() == '') {
+    			self::$_routerRoot = $this->webRoot();
+			} else {
+    			self::$_routerRoot = $this->webRoot() . '/' . $this->requestRoot();
+			}
+		}
+		return self::$_routerRoot;
 	}
 	
 	public function isDebug() {
 		return App::$base->app_config->get('debug');
+	}
+	
+	public function tplRoot() {
+    	if (self::$_tplRoot == null) {
+			if ($this->requestRoot() == '') {
+				self::$_tplRoot = '/student';
+			} else {
+				self::$_tplRoot = '/' . $this->requestRoot();
+			}
+		}
+		return self::$_tplRoot;
 	}
 	
 	public function csk() {
@@ -73,4 +149,11 @@ class baseAction extends Action
 		}
 		return $this->_csk;
 	}
+	
+	public function testEcho() {
+    	$str = "<p>HostInfo:" . self::request()->getHostInfo() . "</p>";
+    	$str .= "<p>URL:" . self::request()->getUrl() . "</p>";
+    	exit($str);
+	}
+	
 }

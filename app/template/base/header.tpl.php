@@ -1,4 +1,2 @@
-<script type="text/javascript">
-    var webRoot = '<?=$webRoot?>';
-</script>
-<body>
+<?php include App::$view_root . "/admin/base/header.begin.tpl.php" ?>
+<?php include App::$view_root . "/admin/base/header.end.tpl.php" ?>

@@ -7,7 +7,7 @@ namespace app\dao;
  */
 class userDAO extends baseDAO
 {
-    protected $table = 'Biny_User';
+    protected $table = 'user';
     protected $_pk = 'id';
     protected $_pkCache = true;
 }

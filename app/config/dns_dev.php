@@ -1,11 +1,11 @@
 <?php
 return array(
     'database' => array(
-        'host'     => '127.0.0.1',
-        'database' => 'Biny',
-        'user'     => 'root',
-        'password' => 'root',
-        'encode' => 'utf8',
+		'host'     => '192.168.0.193',
+		'database' => 'db_vtweb',
+		'user'     => 'root',
+		'password' => 'u79Wlaozhou',
+		'encode' => 'utf8mb4',
         'port' => 3306,
         'keep-alive' => true,
     ),
@@ -27,11 +27,9 @@ return array(
         'port' => 21212,
         'keep-alive' => true,
     ),
-    'redis' => array(
-        'host' => '127.0.0.1',
-        'port' => 6379,
-        'keep-alive' => true,
-//        'client' => 'predis', // predis
-//        'persistent' => true, // predis
-    ),
+	'redis' => array(
+		'host'     => '192.168.0.193',
+		'port' => 6379,
+		'keep-alive' => true,
+	),
 );

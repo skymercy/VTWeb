@@ -7,13 +7,23 @@
  */
 
 namespace app\model;
+
 use biny\lib\Factory;
 use biny\lib\BinyString;
 
 /**
  * Class baseModel
- * @package app\model
+ *
+ * @property int $id
+ * @property int $uid
+ * @property int $updated_at
+ * @property int $created_at
+ *
  * @property \app\dao\userDAO $userDAO
+ * @property \app\dao\studentDAO $studentDAO
+ * @property \app\dao\teacherDAO $teacherDAO
+ *
+ * @package app\model
  */
 class baseModel
 {

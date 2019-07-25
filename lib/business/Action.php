@@ -14,6 +14,9 @@ use App;
  * Class Action
  * @package biny\lib *
  * @property \app\service\privilegeService $privilegeService
+ * @property string $reqRoot
+ * @property string $reqModule
+ * @property string $reqMethod
  */
 class Action
 {
