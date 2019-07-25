@@ -9,6 +9,8 @@ return array(
         'routeRule' => array(
 //            '<method:\w+>/test/<id:\d+>.html' => 'test/<method>',
 //            'rest/<rid:[\d]+>/<method:\w+>/<mid:\d+>' => 'rest/<method>',
+			'manage/teacher/edit/<id:\d+>' => 'manage/teacher/edit',
+			'manage/student/edit/<id:\d+>' => 'manage/student/edit',
         ),
     ),
 

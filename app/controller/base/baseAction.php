@@ -35,7 +35,26 @@ class baseAction extends Action
 	protected $searchData = [];
 	
 	public function init() {
-	
+		$this->searchData = $this->param('SearchData');
+		if (empty($this->searchData)) {
+			$this->searchData = [];
+		}
+		if (!isset($this->searchData['page'])) {
+			$this->searchData['page'] = 1;
+		}
+		if (!isset($this->searchData['pageSize'])) {
+			$this->searchData['pageSize'] = 20;
+		}
+		foreach ($this->searchData as $k=>$v) {
+			if (is_string($this->searchData[$k])) {
+				$this->searchData[$k] = trim($this->searchData[$k]);
+				
+				if (strlen($this->searchData[$k]) == 0) {
+					unset($this->searchData[$k]);
+				}
+			}
+		}
+		$this->_csk = $this->param('csk');
 	}
 	
     /**
@@ -54,6 +73,7 @@ class baseAction extends Action
 			'isMobile' => $this->isMobile(),
 			'csk' => $this->_csk,
 			'breadcrumbs' => $this->breadcrumbs,
+			'searchData' => $this->searchData,
 			'sidebar' => [
 				"{$this->reqModule}-{$this->reqMethod}" => true,
 				"{$this->reqModule}" => true,
