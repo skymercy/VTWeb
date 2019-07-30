@@ -14,6 +14,7 @@ CREATE TABLE `user` (
   `status` SMALLINT NOT NULL DEFAULT '1' COMMENT '状态:0正常 1锁定',
   `created_at` INT(11) NOT NULL DEFAULT '0',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
   `created_day` INT(11) NOT NULL DEFAULT '0',
   `created_month` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -24,8 +25,9 @@ CREATE TABLE `user` (
 /** 学生表 */
 DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
-  `uid` INT(11) NOT NULL NOT NULL COMMENT 'user表的id',
-  `student_id` VARCHAR(50) NOT NULL COMMENT '学生学号',
+  `uid` INT(11) NOT NULL COMMENT 'user表的id',
+  `student_no` VARCHAR(50) NOT NULL COMMENT '学生学号',
+  `classes_id` VARCHAR(50) NOT NULL COMMENT '所属班级',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -33,7 +35,32 @@ CREATE TABLE `student` (
 /** 教师表 */
 DROP TABLE IF EXISTS `teacher`;
 CREATE TABLE `teacher` (
-  `uid` INT(11) NOT NULL NOT NULL COMMENT 'user表的id',
+  `uid` INT(11) NOT NULL COMMENT 'user表的id',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/**院系表*/
+DROP TABLE IF EXISTS `college`;
+CREATE TABLE `college` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `pid` INT(11) NOT NULL DEFAULT '0' COMMENT '父节点id',
+  `title` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '院系名',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  `updated_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/**班级表*/
+DROP TABLE IF EXISTS `classes`;
+CREATE TABLE `classes` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `title` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '班级名',
+  `college_id` INT(11) NOT NULL DEFAULT '0' COMMENT '所属院系',
+  `college_pid` INT(11) NOT NULL DEFAULT '0' COMMENT '所属院系',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  `updated_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

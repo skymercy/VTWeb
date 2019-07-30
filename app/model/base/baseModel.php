@@ -22,6 +22,8 @@ use biny\lib\BinyString;
  * @property \app\dao\userDAO $userDAO
  * @property \app\dao\studentDAO $studentDAO
  * @property \app\dao\teacherDAO $teacherDAO
+ * @property \app\dao\collegeDAO $collegeDAO
+ * @property \app\dao\classesDAO $classesDAO
  *
  * @package app\model
  */

@@ -11,6 +11,8 @@ return array(
 //            'rest/<rid:[\d]+>/<method:\w+>/<mid:\d+>' => 'rest/<method>',
 			'manage/teacher/edit/<id:\d+>' => 'manage/teacher/edit',
 			'manage/student/edit/<id:\d+>' => 'manage/student/edit',
+			'manage/college/edit/<id:\d+>' => 'manage/college/edit',
+			'manage/classes/edit/<id:\d+>' => 'manage/classes/edit',
         ),
     ),
 

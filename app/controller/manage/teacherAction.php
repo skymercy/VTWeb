@@ -84,6 +84,7 @@ class teacherAction extends baseAction
 					'email' => $formData['email'],
 					'role' => user::Role_Teacher,
 					'status' => user::Status_Normal,
+					'created_by' => App::$model->user->id,
 					'password_hash' => \YiiSecurity::generatePasswordHash($formData['password']),
 					'created_at' => time(),
 					'updated_at' => time(),

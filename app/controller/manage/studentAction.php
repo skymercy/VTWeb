@@ -84,6 +84,7 @@ class studentAction extends baseAction
 					'email' => $formData['email'],
 					'role' => user::Role_Student,
 					'status' => user::Status_Normal,
+					'created_by' => App::$model->user->id,
 					'password_hash' => \YiiSecurity::generatePasswordHash($formData['password']),
 					'created_at' => time(),
 					'updated_at' => time(),

@@ -19,7 +19,7 @@
 <![endif]-->
 
 <!-- inline styles related to this page -->
-
+<link rel="stylesheet" href="<?=$webRoot?>/assets/css/chosen.min.css" />
 <!-- ace settings handler -->
 <script src="<?=$webRoot?>/assets/js/ace-extra.min.js"></script>
 

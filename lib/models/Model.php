@@ -22,10 +22,14 @@ use ReflectionException;
  * @property app\model\user $user
  * @property app\model\student $student
  * @property app\model\teacher $teacher
+ * @property app\model\college $college
+ * @property app\model\classes $classes
  *
  * @method app\model\user user($id)
  * @method app\model\student student($id)
  * @method app\model\teacher teacher($id)
+ * @method app\model\college college($id)
+ * @method app\model\classes classes($id)
  */
 class Model
 {

@@ -34,6 +34,50 @@
 		</a>
 		<b class="arrow"></b>
 	</li>
+	<li class="<?=(isset($sidebar['college'])? 'active open' : '')?>">
+		<a href="javascript:;" class="dropdown-toggle">
+			<i class="menu-icon fa fa-gavel"></i>
+			<span class="menu-text">院系管理</span>
+			<b class="arrow fa fa-angle-down"></b>
+		</a>
+		<b class="arrow"></b>
+		<ul class="submenu">
+			<li class="<?=(isset($sidebar['college-create'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/college/create">
+					<i class="menu-icon fa fa-caret-right"></i>
+					添加院系
+				</a>
+			</li>
+			<li class="<?=(isset($sidebar['college-index'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/college">
+					<i class="menu-icon fa fa-caret-right"></i>
+					院系列表
+				</a>
+			</li>
+		</ul>
+	</li>
+	<li class="<?=(isset($sidebar['classes'])? 'active open' : '')?>">
+		<a href="javascript:;" class="dropdown-toggle">
+			<i class="menu-icon fa fa-gavel"></i>
+			<span class="menu-text">班级管理</span>
+			<b class="arrow fa fa-angle-down"></b>
+		</a>
+		<b class="arrow"></b>
+		<ul class="submenu">
+			<li class="<?=(isset($sidebar['classes-create'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/classes/create">
+					<i class="menu-icon fa fa-caret-right"></i>
+					添加班级
+				</a>
+			</li>
+			<li class="<?=(isset($sidebar['classes-index'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/classes">
+					<i class="menu-icon fa fa-caret-right"></i>
+					班级列表
+				</a>
+			</li>
+		</ul>
+	</li>
     <li class="<?=(isset($sidebar['teacher'])? 'active open' : '')?>">
         <a href="javascript:;" class="dropdown-toggle">
             <i class="menu-icon fa fa-gavel"></i>

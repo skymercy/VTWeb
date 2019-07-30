@@ -22,8 +22,37 @@
 <script src="<?=$webRoot?>/assets/js/ace-elements.min.js"></script>
 <script src="<?=$webRoot?>/assets/js/ace.min.js"></script>
 <script src="<?=$webRoot?>/assets/js/jquery.toast.min.js"></script>
+<script src="<?=$webRoot?>/assets/js/chosen.jquery.min.js"></script>
 <script src="<?=$webRoot?>/assets/js/main.js"></script>
 <script>
+	if(!ace.vars['touch']) {
+		$('.chosen-select').chosen({allow_single_deselect:true});
+		//resize the chosen on window resize
+
+		$(window)
+			.off('resize.chosen')
+			.on('resize.chosen', function() {
+				$('.chosen-select').each(function() {
+					var $this = $(this);
+//            $this.next().css({'width': $this.parent().width()});
+					$this.next().css({'width': '100%'});
+				})
+			}).trigger('resize.chosen');
+		//resize chosen on sidebar collapse/expand
+		$(document).off('settings.ace.chosen').on('settings.ace.chosen', function(e, event_name, event_val) {
+			if(event_name != 'sidebar_collapsed') return;
+			$('.chosen-select').each(function() {
+				var $this = $(this);
+//          $this.next().css({'width': $this.parent().width()});
+				$this.next().css({'width': '100%'});
+			})
+		});
+	}
+	var refreshChosen = function () {
+		if(!ace.vars['touch']) {
+			$('.chosen-select').trigger("chosen:updated");
+		}
+	};
 	var toastError = function(msg) {
 		$.toast({
 			text: msg,
