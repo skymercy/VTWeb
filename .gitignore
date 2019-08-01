@@ -37,3 +37,4 @@ shell.php
 web/index.php
 config/autoload.php
 app/controller/test/*
+web/ueditor/index.html

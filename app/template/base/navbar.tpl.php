@@ -25,4 +25,7 @@
 			</small>
 		</a>
 	</div>
+	<div class="navbar-header  pull-right">
+		<a href="/login/logout"  class="navbar-brand" style="font-size: 14px;">退出登录</a>
+	</div>
 </div><!-- /.navbar-container -->

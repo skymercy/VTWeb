@@ -71,4 +71,11 @@ class loginAction extends baseAction
 			}
 		}
 	}
+	
+	public function action_logout() {
+		if (App::$model->user && App::$model->user->exist()) {
+			App::$model->user->loginOut();
+		}
+		self::redirectToLoginPage();
+	}
 }
