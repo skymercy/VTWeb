@@ -64,3 +64,39 @@ CREATE TABLE `classes` (
   `updated_at` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/**课程表*/
+DROP TABLE IF EXISTS `course`;
+CREATE TABLE `course` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `title` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '班级名',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  `updated_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/**课程-班级表*/
+DROP TABLE IF EXISTS `classes_course`;
+CREATE TABLE `classes_course` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `classes_id` INT(11) NOT NULL ,
+  `course_id` INT(11) NOT NULL,
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_classes_course` (`classes_id`,`course_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/**题库*/
+DROP TABLE IF EXISTS `question`;
+CREATE TABLE `question` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `type` INT(11) NOT NULL DEFAULT '0选择题 1答题',
+  `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `course_id` INT(11) NOT NULL DEFAULT '0',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  `updated_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

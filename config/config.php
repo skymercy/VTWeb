@@ -13,6 +13,7 @@ return array(
 			'manage/student/edit/<id:\d+>' => 'manage/student/edit',
 			'manage/college/edit/<id:\d+>' => 'manage/college/edit',
 			'manage/classes/edit/<id:\d+>' => 'manage/classes/edit',
+			'manage/course/edit/<id:\d+>' => 'manage/course/edit',
         ),
     ),
 

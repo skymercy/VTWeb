@@ -24,12 +24,16 @@ use ReflectionException;
  * @property app\model\teacher $teacher
  * @property app\model\college $college
  * @property app\model\classes $classes
+ * @property app\model\course $course
+ * @property app\model\classesCourse $classesCourse
  *
  * @method app\model\user user($id)
  * @method app\model\student student($id)
  * @method app\model\teacher teacher($id)
  * @method app\model\college college($id)
  * @method app\model\classes classes($id)
+ * @method app\model\course course($id)
+ * @method app\model\classesCourse classesCourse($id)
  */
 class Model
 {

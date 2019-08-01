@@ -18,12 +18,15 @@ use biny\lib\BinyString;
  * @property int $uid
  * @property int $updated_at
  * @property int $created_at
+ * @property int $created_by
  *
  * @property \app\dao\userDAO $userDAO
  * @property \app\dao\studentDAO $studentDAO
  * @property \app\dao\teacherDAO $teacherDAO
  * @property \app\dao\collegeDAO $collegeDAO
  * @property \app\dao\classesDAO $classesDAO
+ * @property \app\dao\courseDAO $courseDAO
+ * @property \app\dao\classesCourseDAO $classesCourseDAO
  *
  * @package app\model
  */

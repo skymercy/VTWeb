@@ -34,6 +34,50 @@
 		</a>
 		<b class="arrow"></b>
 	</li>
+    <li class="<?=(isset($sidebar['teacher'])? 'active open' : '')?>">
+        <a href="javascript:;" class="dropdown-toggle">
+            <i class="menu-icon fa fa-gavel"></i>
+            <span class="menu-text">教师管理</span>
+            <b class="arrow fa fa-angle-down"></b>
+        </a>
+        <b class="arrow"></b>
+        <ul class="submenu">
+            <li class="<?=(isset($sidebar['teacher-create'])? 'active' : '')?>">
+                <a href="<?=$routerRoot?>/teacher/create">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    添加教师
+                </a>
+            </li>
+            <li class="<?=(isset($sidebar['teacher-index'])? 'active' : '')?>">
+                <a href="<?=$routerRoot?>/teacher">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    教师列表
+                </a>
+            </li>
+        </ul>
+    </li>
+	<li class="<?=(isset($sidebar['course'])? 'active open' : '')?>">
+		<a href="javascript:;" class="dropdown-toggle">
+			<i class="menu-icon fa fa-gavel"></i>
+			<span class="menu-text">实验课程管理</span>
+			<b class="arrow fa fa-angle-down"></b>
+		</a>
+		<b class="arrow"></b>
+		<ul class="submenu">
+			<li class="<?=(isset($sidebar['course-create'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/course/create">
+					<i class="menu-icon fa fa-caret-right"></i>
+					添加实验课程
+				</a>
+			</li>
+			<li class="<?=(isset($sidebar['course-index'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/course">
+					<i class="menu-icon fa fa-caret-right"></i>
+					实验课程列表
+				</a>
+			</li>
+		</ul>
+	</li>
 	<li class="<?=(isset($sidebar['college'])? 'active open' : '')?>">
 		<a href="javascript:;" class="dropdown-toggle">
 			<i class="menu-icon fa fa-gavel"></i>
@@ -78,28 +122,6 @@
 			</li>
 		</ul>
 	</li>
-    <li class="<?=(isset($sidebar['teacher'])? 'active open' : '')?>">
-        <a href="javascript:;" class="dropdown-toggle">
-            <i class="menu-icon fa fa-gavel"></i>
-            <span class="menu-text">教师管理</span>
-            <b class="arrow fa fa-angle-down"></b>
-        </a>
-        <b class="arrow"></b>
-        <ul class="submenu">
-            <li class="<?=(isset($sidebar['teacher-create'])? 'active' : '')?>">
-                <a href="<?=$routerRoot?>/teacher/create">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    添加教师
-                </a>
-            </li>
-            <li class="<?=(isset($sidebar['teacher-index'])? 'active' : '')?>">
-                <a href="<?=$routerRoot?>/teacher">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    教师列表
-                </a>
-            </li>
-        </ul>
-    </li>
     <li class="<?=(isset($sidebar['student'])? 'active open' : '')?>">
         <a href="javascript:;" class="dropdown-toggle">
             <i class="menu-icon fa fa-users"></i>
