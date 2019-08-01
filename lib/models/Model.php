@@ -26,6 +26,7 @@ use ReflectionException;
  * @property app\model\classes $classes
  * @property app\model\course $course
  * @property app\model\classesCourse $classesCourse
+ * @property app\model\question $question
  *
  * @method app\model\user user($id)
  * @method app\model\student student($id)
@@ -34,6 +35,7 @@ use ReflectionException;
  * @method app\model\classes classes($id)
  * @method app\model\course course($id)
  * @method app\model\classesCourse classesCourse($id)
+ * @method app\model\question question($id)
  */
 class Model
 {

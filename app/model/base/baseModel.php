@@ -19,6 +19,7 @@ use biny\lib\BinyString;
  * @property int $updated_at
  * @property int $created_at
  * @property int $created_by
+ * @property int $status
  *
  * @property \app\dao\userDAO $userDAO
  * @property \app\dao\studentDAO $studentDAO
@@ -27,6 +28,7 @@ use biny\lib\BinyString;
  * @property \app\dao\classesDAO $classesDAO
  * @property \app\dao\courseDAO $courseDAO
  * @property \app\dao\classesCourseDAO $classesCourseDAO
+ * @property \app\dao\questionDAO $questionDAO
  *
  * @package app\model
  */

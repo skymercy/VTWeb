@@ -1,3 +1,6 @@
+<?php
+
+?>
 <?php include App::$view_root . "/base/header.begin.tpl.php" ?>
 <?php include App::$view_root . "/base/header.end.tpl.php" ?>
 
@@ -72,6 +75,91 @@
 		</div>
 	</div>
 </div>
+
+
+<!-- 题目模态框（Modal） -->
+<div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content" style="background: transparent;">
+			<div class="widget-box">
+				<div class="widget-header">
+					<h5 class="widget-title">创建/编辑题目</h5>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="row">
+							<div class="col-sm-12">
+								<form id="question-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
+									<input type="hidden" name="Question[course_id]" value="<?=$PRM['course']['id']?>">
+									<div class="form-group" id="question-id">
+										<label class="col-sm-2 control-label no-padding-left" > ID </label>
+										<div class="col-xs-10 col-sm-2">
+											<input type="text" class="form-control" name="Question[id]" readonly />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" >类型</label>
+										<div class="col-xs-10 col-sm-10">
+											<select class="chosen-select" id="form-field-is_multiple" name="Question[type]">
+												<?php foreach (\app\model\question::$TypeNames as $k=>$v): ?>
+													<option value="<?=$k?>"><?=$v?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" > 题目 </label>
+										<div class="col-sm-10">
+											<textarea class="form-control" name="Question[title]"></textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" > 排序 </label>
+										<div class="col-xs-10 col-sm-2">
+											<input type="text" class="form-control" name="Question[sort]" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" > 分值 </label>
+										<div class="col-xs-10 col-sm-2">
+											<input type="text" class="form-control" name="Question[score]" />
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" >状态</label>
+										<div class="col-xs-10 col-sm-10">
+											<select class="chosen-select" id="form-field-is_multiple" name="Question[status]">
+												<?php foreach (\app\model\question::$StatusNames as $k=>$v): ?>
+													<option value="<?=$k?>"><?=$v?></option>
+												<?php endforeach; ?>
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" > 内容 </label>
+										<div class="col-sm-10">
+											<textarea class="form-control" name="Question[content]"></textarea>
+										</div>
+									</div>
+									<div class="clearfix form-actions">
+										<div class="col-md-offset-2 col-md-9">
+											<button class="btn btn-info" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												保存
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+
+
 <?php include App::$view_root . "/base/footer.begin.tpl.php" ?>
 <!-- inline scripts related to this page -->
 <script src="<?=$webRoot?>/assets/js/jquery.validate.min.js"></script>
@@ -91,6 +179,35 @@
 				postRequest('/manage/course/ajax_edit_post', new FormData($('#course-form')[0]));
 			}
 		});
+
+
+		$('#question-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			ignore: "",
+			rules: {
+				'Question[id]': {
+					required: true
+				},
+				'Question[title]': {
+					required: true
+				},
+			},
+			submitHandler: function (form) {
+				postRequest('/manage/question/ajax_edit_post', new FormData($('#question-form')[0]));
+			}
+		});
+		
+
+		$('.btn-create-question').on('click', function (e) {
+			$("#question-form")[0].reset();
+			$("#question-form").find('input[name="Question[id]"]').val('0');
+			refreshChosen();
+			$('#question-id').hide();
+			$('#questionModal').modal('show');
+		});
+
 	});
 </script>
 <?php include App::$view_root . "/base/footer.end.tpl.php" ?>

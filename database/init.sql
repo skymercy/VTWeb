@@ -92,9 +92,14 @@ CREATE TABLE `classes_course` (
 DROP TABLE IF EXISTS `question`;
 CREATE TABLE `question` (
   `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
-  `type` INT(11) NOT NULL DEFAULT '0选择题 1答题',
-  `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
   `course_id` INT(11) NOT NULL DEFAULT '0',
+  `type` INT(11) NOT NULL DEFAULT '0' COMMENT '1单选题 2多选题 3判断 4填空 5简答题',
+  `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` TEXT,
+  `is_correct` SMALLINT NOT NULL DEFAULT '0' COMMENT '判断题该字段有效',
+  `score` SMALLINT NOT NULL DEFAULT '0' COMMENT '问题分数',
+  `sort` INT(11) NOT NULL DEFAULT '0' COMMENT '排序',
+  `status` SMALLINT NOT NULL DEFAULT '0' COMMENT '0不发布到试卷, 1发布到试卷',
   `created_by` INT(11) NOT NULL DEFAULT '0',
   `created_at` INT(11) NOT NULL DEFAULT '0',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
