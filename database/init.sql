@@ -29,7 +29,8 @@ CREATE TABLE `student` (
   `student_no` VARCHAR(50) NOT NULL COMMENT '学生学号',
   `classes_id` VARCHAR(50) NOT NULL COMMENT '所属班级',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`uid`)
+  PRIMARY KEY (`uid`),
+  INDEX `idx-classes` (`classes_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /** 教师表 */
@@ -49,7 +50,8 @@ CREATE TABLE `college` (
   `created_by` INT(11) NOT NULL DEFAULT '0',
   `created_at` INT(11) NOT NULL DEFAULT '0',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx-pid` (`pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /**班级表*/
@@ -62,7 +64,8 @@ CREATE TABLE `classes` (
   `created_by` INT(11) NOT NULL DEFAULT '0',
   `created_at` INT(11) NOT NULL DEFAULT '0',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx-college` (`college_id`,`college_pid`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 /**课程表*/
@@ -103,5 +106,22 @@ CREATE TABLE `question` (
   `created_by` INT(11) NOT NULL DEFAULT '0',
   `created_at` INT(11) NOT NULL DEFAULT '0',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  INDEX `idx-course` (`course_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `question_item`;
+CREATE TABLE `question_item` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `question_id` INT(11) NOT NULL DEFAULT '0',
+  `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` TEXT,
+  `is_correct` SMALLINT NOT NULL DEFAULT '0' COMMENT '是否正确答案',
+  `sort` INT(11) NOT NULL DEFAULT '0' COMMENT '排序',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  `updated_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  INDEX `idx-question` (`question_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

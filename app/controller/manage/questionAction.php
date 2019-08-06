@@ -13,8 +13,10 @@ use app\controller\manage\base\baseAction;
 use app\dao\courseDAO;
 use app\dao\collegeDAO;
 use app\dao\questionDAO;
+use app\dao\questionItemDAO;
 use app\dao\teacherDAO;
 use app\dao\userDAO;
+use app\model\questionItem;
 use app\model\user;
 
 class questionAction extends baseAction
@@ -33,6 +35,25 @@ class questionAction extends baseAction
 			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
 		}
 		return $this->json(['error'=>0,'data'=>$instance->attributes()]);
+	}
+	
+	public function action_ajax_items() {
+		$id = $this->param('id', 0);
+		if (empty($id)) {
+			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
+		}
+		$instance = App::$model->question($id);
+		if (!$instance->exist()) {
+			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
+		}
+		$data = [
+			'id' => $instance->id,
+			'title'=>$instance->title,
+		];
+		$searchData = $this->searchData;
+		$searchData['question_id'] = $instance->id;
+		$result = questionItemDAO::searchQuestionItem($searchData);
+		return $this->json(['error'=>0,'data'=> $data, 'items'=>$result['items']]);
 	}
 	
 	public function action_ajax_edit_post() {

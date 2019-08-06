@@ -83,10 +83,10 @@
 												<td></td>
 												<td>
 													<div class="hidden-sm hidden-xs btn-group">
-														<a href="#" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
+														<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
 															<i class="ace-icon fa fa-edit bigger-120"></i>
 														</a>
-														<a href="#" class="btn btn-xs btn-info">
+														<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question-items" data-id="<?=$item['id']?>">
 															<i class="ace-icon fa fa-question bigger-120"></i>
 														</a>
 													</div>
@@ -106,7 +106,97 @@
 	</div>
 </div>
 
-
+	<!-- 题目选项列表模态框（Modal） -->
+	<div class="modal fade" id="viewQuestionItemsModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="background: transparent;">
+				<div class="widget-box">
+					<div class="widget-header">
+						<h5 class="widget-title">
+							编辑题目选项
+						</h5>
+						<div>
+							题目: <span id="viewQuestionItemsModal-title" style="color: red;">xxxxx</span>
+							<small>
+								<button class="btn btn-xs btn-warning btn-create-question-item" type="button" data-id="0">
+									<i class="ace-icon fa fa-plus bigger-120"></i>
+									添加选项
+								</button>
+							</small>
+						</div>
+					</div>
+					<div class="widget-body">
+						<div class="widget-main">
+							<div class="row" style="  max-height: 300px; overflow-y: scroll;">
+								<table id="question-table" class="table  table-bordered table-hover">
+									<thead>
+									<tr>
+										<th style="width: 5%;">ID</th>
+										<th style="width: 5%;">序号</th>
+										<th style="width: 70%;">内容</th>
+										<th style="width: 20%;">操作</th>
+									</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 题目选项模态框（Modal） -->
+	<div class="modal fade" id="questionItemModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="background: transparent;">
+				<div class="widget-box">
+					<div class="widget-header">
+						<h5 class="widget-title">创建/编辑选项</h5>
+					</div>
+					<div class="widget-body">
+						<div class="widget-main">
+							<div class="row">
+								<div class="col-sm-12">
+									<form id="questionItem-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
+										<input type="hidden" name="QuestionItem[question_id]" value="0">
+										<div class="form-group" id="questionItem-id">
+											<label class="col-sm-2 control-label no-padding-left" > ID </label>
+											<div class="col-xs-10 col-sm-2">
+												<input type="text" class="form-control" name="QuestionItem[id]" readonly />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" > 内容 </label>
+											<div class="col-sm-10 col-sm-9">
+												<textarea class="form-control" name="QuestionItem[title]"></textarea>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" > 内容2 </label>
+											<div class="col-xs-10 col-sm-9" id="item-editor-container">
+												<script id="editor2" type="text/plain" style="width:100%;height:300px;" ></script>
+											</div>
+										</div>
+										<div></div>
+										<div class="clearfix form-actions">
+											<div class="col-md-offset-2 col-md-9">
+												<button class="btn btn-info" type="submit">
+													<i class="ace-icon fa fa-check bigger-110"></i>
+													保存
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal -->
+	</div>
 <!-- 题目模态框（Modal） -->
 <div class="modal fade" id="questionModal" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
@@ -168,8 +258,7 @@
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" > 内容 </label>
 										<div class="col-xs-10 col-sm-9">
-											<!--name="Question[content]"-->
-											<script id="editor" type="text/plain" style="width:100%;height:300px;"></script>
+	<script id="editor" type="text/plain" style="width:100%;height:300px;" ></script>
 										</div>
 									</div>
 									<div class="clearfix form-actions">
@@ -201,7 +290,27 @@
 <script type="text/javascript" charset="utf-8" src="<?=$webRoot?>/ueditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 	$(function () {
-		var ue = UE.getEditor('editor');
+		var questionEditor = null;
+		var itemEditor = null;
+		
+		var destroyQuestionEditor = function () {
+			if (questionEditor!=null) {
+				questionEditor.destroy();
+			}
+		};
+		var createQuestionEditor = function () {
+			destroyItemEditor();
+			questionEditor = UE.getEditor('editor');
+		};
+		var destroyItemEditor = function () {
+			if (itemEditor!=null) {
+				itemEditor.destroy();
+			}
+		};
+		var createItemEditor = function () {
+			destroyQuestionEditor();
+			itemEditor = UE.getEditor('editor2');
+		};
 		
 		$('#course-form').validate({
 			errorElement: 'div',
@@ -224,16 +333,24 @@
 			errorClass: 'help-block',
 			focusInvalid: false,
 			ignore: "",
-			rules: {
-				'Question[title]': {
-					required: true
-				},
-			},
 			submitHandler: function (form) {
 				var formData = new FormData($('#question-form')[0]);
 				formData.delete("editorValue");
-				formData.append("Question[content]", UE.getEditor('editor').getContent());
+				formData.append("Question[content]", questionEditor.getContent());
 				postRequest('/manage/question/ajax_edit_post', formData);
+			}
+		});
+
+		$('#questionItem-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			ignore: "",
+			submitHandler: function (form) {
+				var formData = new FormData($('#questionItem-form')[0]);
+				formData.delete("editorValue");
+				formData.append("QuestionItem[content]", ue.getContent());
+				postRequest('/manage/questionItem/ajax_edit_post', formData);
 			}
 		});
 		
@@ -241,10 +358,27 @@
 		$('.btn-create-question').on('click', function (e) {
 			$("#question-form")[0].reset();
 			$("#question-form").find('input[name="Question[id]"]').val('0');
-			ue.setContent('', false);
+			createQuestionEditor();
+			setTimeout(function () {
+				questionEditor.setContent('',false);
+			},500);
 			refreshChosen();
 			$('#question-id').hide();
 			$('#questionModal').modal('show');
+		});
+
+		$('.btn-create-question-item').on('click', function (e) {
+			var questionId = $('.btn-create-question-item').attr('data-id');
+			$("#questionItem-form")[0].reset();
+			$("#questionItem-form").find('input[name="QuestionItem[id]"]').val('0');
+			$("#questionItem-form").find('input[name="QuestionItem[question_id]"]').val(questionId);
+			createItemEditor();
+			setTimeout(function () {
+				itemEditor.setContent('',false);
+			},500);
+			refreshChosen();
+			$('#questionItem-id').hide();
+			$('#questionItemModal').modal('show');
 		});
 		
 		$('.btn-edit-question').on('click', function (e) {
@@ -255,14 +389,22 @@
 				$("#question-form").find('input[name="Question[sort]"]').val(data.data.sort);
 				$("#question-form").find('textarea[name="Question[title]"]').val(data.data.title);
 				$("#question-form").find('input[name="Question[score]"]').val((parseInt(data.data.score)/100).toFixed(2));
-				ue.setContent(data.data.content ? data.data.content : '', false);
+				createQuestionEditor();
+				questionEditor.setContent(data.data.content ? data.data.content : '', false);
 				refreshChosen();
 				$('#question-id').show();
 				$('#questionModal').modal('show');
 			},'get');
 		});
 		
-		
+		$('.btn-edit-question-items').on('click', function (e) {
+			var qid = $(this).attr('data-id');
+			postRequest('/manage/question/ajax_items?id='+qid,{},function (data) {
+				$('#viewQuestionItemsModal-title').text(data.data.title);
+				$('.btn-create-question-item').attr('data-id',data.data.id);
+			},'get');
+			$('#viewQuestionItemsModal').modal('show');
+		});
 
 	});
 </script>
