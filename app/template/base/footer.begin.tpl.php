@@ -61,9 +61,14 @@
 			textColor : 'red'
 		});
 	}
-	var postRequest = function(uri, data, success) {
+	var postRequest = function(uri, data, success, type) {
+		if(loading) {
+			return;
+		}
+		loading = true;
+		var t = type || 'post';
 		$.ajax({
-			type: 'post',
+			type: t,
 			contentType: false,
 			processData: false,
 			url: uri,

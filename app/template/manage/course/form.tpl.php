@@ -2,6 +2,17 @@
 
 ?>
 <?php include App::$view_root . "/base/header.begin.tpl.php" ?>
+<style>
+	.modal-dialog {
+		width: 80%;!important;
+	}
+	.modal {
+		z-index: 950;!important;
+	}
+	.modal-backdrop {
+		z-index: 940;!important;
+	}
+</style>
 <?php include App::$view_root . "/base/header.end.tpl.php" ?>
 
 <div class="page-content">
@@ -56,6 +67,7 @@
 									<table id="question-table" class="table  table-bordered table-hover">
 										<thead>
 										<tr>
+											<th style="width: 10%;">ID</th>
 											<th style="width: 10%;">序号</th>
 											<th style="width: 50%;">题目</th>
 											<th style="width: 20%;">类型</th>
@@ -63,6 +75,24 @@
 										</tr>
 										</thead>
 										<tbody>
+										<?php foreach ($PRM['items'] as $item): ?>
+											<tr class="j-tag-item-<?=$item['id']?>">
+												<td class="j-item-id"><span><?=$item['id']?></span></td>
+												<td class="j-item-sort"><span><?=$item['sort']?></span></td>
+												<td class="j-item-title"><span><?=$item['title']?></span></td>
+												<td></td>
+												<td>
+													<div class="hidden-sm hidden-xs btn-group">
+														<a href="#" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
+															<i class="ace-icon fa fa-edit bigger-120"></i>
+														</a>
+														<a href="#" class="btn btn-xs btn-info">
+															<i class="ace-icon fa fa-question bigger-120"></i>
+														</a>
+													</div>
+												</td>
+											</tr>
+										<?php endforeach;?>
 										</tbody>
 									</table>
 								</div>
@@ -99,7 +129,7 @@
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" >类型</label>
-										<div class="col-xs-10 col-sm-10">
+										<div class="col-xs-10 col-sm-9">
 											<select class="chosen-select" id="form-field-is_multiple" name="Question[type]">
 												<?php foreach (\app\model\question::$TypeNames as $k=>$v): ?>
 													<option value="<?=$k?>"><?=$v?></option>
@@ -109,25 +139,25 @@
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" > 题目 </label>
-										<div class="col-sm-10">
+										<div class="col-sm-10 col-sm-9">
 											<textarea class="form-control" name="Question[title]"></textarea>
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" > 排序 </label>
-										<div class="col-xs-10 col-sm-2">
+										<div class="col-xs-10  col-sm-9">
 											<input type="text" class="form-control" name="Question[sort]" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" > 分值 </label>
-										<div class="col-xs-10 col-sm-2">
+										<div class="col-xs-10  col-sm-9">
 											<input type="text" class="form-control" name="Question[score]" />
 										</div>
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" >状态</label>
-										<div class="col-xs-10 col-sm-10">
+										<div class="col-xs-10  col-sm-9">
 											<select class="chosen-select" id="form-field-is_multiple" name="Question[status]">
 												<?php foreach (\app\model\question::$StatusNames as $k=>$v): ?>
 													<option value="<?=$k?>"><?=$v?></option>
@@ -137,8 +167,9 @@
 									</div>
 									<div class="form-group">
 										<label class="col-sm-2 control-label no-padding-left" > 内容 </label>
-										<div class="col-sm-10">
-											<textarea class="form-control" name="Question[content]"></textarea>
+										<div class="col-xs-10 col-sm-9">
+											<!--name="Question[content]"-->
+											<script id="editor" type="text/plain" style="width:100%;height:300px;"></script>
 										</div>
 									</div>
 									<div class="clearfix form-actions">
@@ -170,6 +201,8 @@
 <script type="text/javascript" charset="utf-8" src="<?=$webRoot?>/ueditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 	$(function () {
+		var ue = UE.getEditor('editor');
+		
 		$('#course-form').validate({
 			errorElement: 'div',
 			errorClass: 'help-block',
@@ -192,15 +225,15 @@
 			focusInvalid: false,
 			ignore: "",
 			rules: {
-				'Question[id]': {
-					required: true
-				},
 				'Question[title]': {
 					required: true
 				},
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/question/ajax_edit_post', new FormData($('#question-form')[0]));
+				var formData = new FormData($('#question-form')[0]);
+				formData.delete("editorValue");
+				formData.append("Question[content]", UE.getEditor('editor').getContent());
+				postRequest('/manage/question/ajax_edit_post', formData);
 			}
 		});
 		
@@ -208,10 +241,28 @@
 		$('.btn-create-question').on('click', function (e) {
 			$("#question-form")[0].reset();
 			$("#question-form").find('input[name="Question[id]"]').val('0');
+			ue.setContent('', false);
 			refreshChosen();
 			$('#question-id').hide();
 			$('#questionModal').modal('show');
 		});
+		
+		$('.btn-edit-question').on('click', function (e) {
+			var qid = $(this).attr('data-id');
+			postRequest('/manage/question/ajax_info?id='+qid,{},function (data) {
+				$("#question-form")[0].reset();
+				$("#question-form").find('input[name="Question[id]"]').val(data.data.id);
+				$("#question-form").find('input[name="Question[sort]"]').val(data.data.sort);
+				$("#question-form").find('textarea[name="Question[title]"]').val(data.data.title);
+				$("#question-form").find('input[name="Question[score]"]').val((parseInt(data.data.score)/100).toFixed(2));
+				ue.setContent(data.data.content ? data.data.content : '', false);
+				refreshChosen();
+				$('#question-id').show();
+				$('#questionModal').modal('show');
+			},'get');
+		});
+		
+		
 
 	});
 </script>

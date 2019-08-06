@@ -23,6 +23,18 @@ class questionAction extends baseAction
 		parent::init();
 	}
 	
+	public function action_ajax_info() {
+		$id = $this->param('id', 0);
+		if (empty($id)) {
+			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
+		}
+		$instance = App::$model->question($id);
+		if (!$instance->exist()) {
+			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
+		}
+		return $this->json(['error'=>0,'data'=>$instance->attributes()]);
+	}
+	
 	public function action_ajax_edit_post() {
 		if (self::request()->isPost()) {
 			$formData = $this->param('Question');
@@ -37,7 +49,7 @@ class questionAction extends baseAction
 				$instance->content = $formData['content'];
 				$instance->sort = $formData['sort'];
 				$instance->status = $formData['status'];
-				$instance->is_correct = $formData['is_correct'];
+				$instance->is_correct = intval($formData['is_correct']);
 				$instance->updated_at = time();
 				$instance->save();
 			} else {
@@ -45,9 +57,10 @@ class questionAction extends baseAction
 				$data = [
 					'title' => $formData['title'],
 					'content' => $formData['content'],
+					'course_id' => $formData['course_id'],
 					'score' => $score,
 					'sort' => $formData['sort'],
-					'is_correct' => $formData['is_correct'],
+					'is_correct' =>  intval($formData['is_correct']),
 					'status' => $formData['status'],
 					'created_by' => App::$model->user->id,
 					'created_at' => time(),

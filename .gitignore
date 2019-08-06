@@ -38,3 +38,5 @@ web/index.php
 config/autoload.php
 app/controller/test/*
 web/ueditor/index.html
+web/ueditor/php
+web/uploads

@@ -12,6 +12,7 @@ use APP;
 use app\controller\manage\base\baseAction;
 use app\dao\courseDAO;
 use app\dao\collegeDAO;
+use app\dao\questionDAO;
 use app\dao\teacherDAO;
 use app\dao\userDAO;
 use app\model\user;
@@ -51,7 +52,15 @@ class courseAction extends baseAction
 		
 		$renderData = $instance->attributes();
 		
-		return $this->display('manage/course/form',['course'=>$renderData, 'allColleges' => collegeDAO::allColleges()]);
+		$searchData = $this->searchData;
+		$searchData['course_id'] = $instance->id;
+		$result = questionDAO::searchQuestion($searchData);
+		$pages = [
+			'total' => $result['total'],
+			'num' => $result['num'],
+		];
+		
+		return $this->display('manage/course/form',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages]);
 	}
 	
 	public function action_ajax_edit_post() {

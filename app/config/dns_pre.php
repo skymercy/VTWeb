@@ -1,7 +1,7 @@
 <?php
 return array(
     'database' => array(
-		'host'     => '192.168.1.103',
+		'host'     => '192.168.1.104',
 		'database' => 'db_vtweb',
 		'user'     => 'root',
 		'password' => 'u79Wlaozhou',
@@ -22,7 +22,7 @@ return array(
         'port' => 12121
     ),
     'redis' => array(
-		'host'     => '192.168.1.103',
+		'host'     => '192.168.1.104',
 		'port' => 6379,
 		'keep-alive' => true,
     ),
