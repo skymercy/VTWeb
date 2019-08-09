@@ -80,15 +80,17 @@
 												<td class="j-item-id"><span><?=$item['id']?></span></td>
 												<td class="j-item-sort"><span><?=$item['sort']?></span></td>
 												<td class="j-item-title"><span><?=$item['title']?></span></td>
-												<td></td>
+												<td class="j-item-type"><span><?=\app\model\question::getTypeName($item['type'])?></span></td>
 												<td>
 													<div class="hidden-sm hidden-xs btn-group">
 														<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
 															<i class="ace-icon fa fa-edit bigger-120"></i>
 														</a>
+														<?php if (in_array($item['type'], [\app\model\question::Type_Select, \app\model\question::Type_Select_Multiple])):?>
 														<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question-items" data-id="<?=$item['id']?>">
 															<i class="ace-icon fa fa-question bigger-120"></i>
 														</a>
+														<?php endif;?>
 													</div>
 												</td>
 											</tr>
@@ -106,6 +108,23 @@
 	</div>
 </div>
 
+<table style="display: none;">
+	<tr id="questionItemItem_Tpl">
+		<td><span>{{id}}</span></td>
+		<td><span>{{sort}}</span></td>
+		<td><span>{{title}}</span></td>
+		<td><span>{{content}}</span></td>
+		<td><span>{{correct}}</span></td>
+		<td>
+			<div class="hidden-sm hidden-xs btn-group">
+				<a href="javascript:;" class="btn btn-xs btn-info btn-edit-questionItem" data-id="{{id}}">
+					<i class="ace-icon fa fa-edit bigger-120"></i>
+				</a>
+			</div>
+		</td>
+	</tr>
+</table>
+
 	<!-- 题目选项列表模态框（Modal） -->
 	<div class="modal fade" id="viewQuestionItemsModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
@@ -113,10 +132,9 @@
 				<div class="widget-box">
 					<div class="widget-header">
 						<h5 class="widget-title">
-							编辑题目选项
+							编辑题目[<span id="viewQuestionItemsModal-title" style="color: red;">xxxxx</span>]的选项
 						</h5>
 						<div>
-							题目: <span id="viewQuestionItemsModal-title" style="color: red;">xxxxx</span>
 							<small>
 								<button class="btn btn-xs btn-warning btn-create-question-item" type="button" data-id="0">
 									<i class="ace-icon fa fa-plus bigger-120"></i>
@@ -124,6 +142,7 @@
 								</button>
 							</small>
 						</div>
+						<div style="display: block; width: 100%; height: 15px;"></div>
 					</div>
 					<div class="widget-body">
 						<div class="widget-main">
@@ -133,11 +152,13 @@
 									<tr>
 										<th style="width: 5%;">ID</th>
 										<th style="width: 5%;">序号</th>
-										<th style="width: 70%;">内容</th>
-										<th style="width: 20%;">操作</th>
+										<th style="width: 10%;">内容</th>
+										<th style="width: 50%;">内容2</th>
+										<th style="width: 10%">是否正确</th>
+										<th style="width: 10%;">操作</th>
 									</tr>
 									</thead>
-									<tbody>
+									<tbody id="questionItems_TBody">
 									</tbody>
 								</table>
 							</div>
@@ -165,6 +186,21 @@
 											<label class="col-sm-2 control-label no-padding-left" > ID </label>
 											<div class="col-xs-10 col-sm-2">
 												<input type="text" class="form-control" name="QuestionItem[id]" readonly />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" > 排序 </label>
+											<div class="col-sm-10 col-sm-9">
+												<input type="text" class="form-control" name="QuestionItem[sort]" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" >正确</label>
+											<div class="col-xs-10  col-sm-9">
+												<select class="chosen-select" id="form-field-is_multiple" name="QuestionItem[is_correct]">
+													<option value="0">否</option>
+													<option value="1">是</option>
+												</select>
 											</div>
 										</div>
 										<div class="form-group">
@@ -293,23 +329,13 @@
 		var questionEditor = null;
 		var itemEditor = null;
 		
-		var destroyQuestionEditor = function () {
-			if (questionEditor!=null) {
-				questionEditor.destroy();
-			}
-		};
 		var createQuestionEditor = function () {
-			destroyItemEditor();
-			questionEditor = UE.getEditor('editor');
-		};
-		var destroyItemEditor = function () {
-			if (itemEditor!=null) {
-				itemEditor.destroy();
-			}
+			if(questionEditor == null)
+				questionEditor = UE.getEditor('editor');
 		};
 		var createItemEditor = function () {
-			destroyQuestionEditor();
-			itemEditor = UE.getEditor('editor2');
+			if(itemEditor == null)
+				itemEditor = UE.getEditor('editor2');
 		};
 		
 		$('#course-form').validate({
@@ -349,8 +375,12 @@
 			submitHandler: function (form) {
 				var formData = new FormData($('#questionItem-form')[0]);
 				formData.delete("editorValue");
-				formData.append("QuestionItem[content]", ue.getContent());
-				postRequest('/manage/questionItem/ajax_edit_post', formData);
+				formData.append("QuestionItem[content]", itemEditor.getContent());
+				var questionId = $('#questionItem-form').find("input[name='QuestionItem[question_id]']").val();
+				postRequest('/manage/questionItem/ajax_edit_post', formData, function(resp){
+					renderQuestionItems(questionId, resp.items);
+					$('#questionItemModal').modal('hide');
+				});
 			}
 		});
 		
@@ -381,6 +411,25 @@
 			$('#questionItemModal').modal('show');
 		});
 		
+		$('#questionItems_TBody').on('click','.btn-edit-questionItem', function(e) {
+			var itemId = $(this).attr('data-id');
+			postRequest('/manage/questionItem/ajax_info?id='+itemId, {}, function(data){
+				$("#questionItem-form")[0].reset();
+				$("#questionItem-form").find('input[name="QuestionItem[id]"]').val(data.data.id);
+				$("#questionItem-form").find('input[name="QuestionItem[question_id]"]').val(data.data.question_id);
+				$("#questionItem-form").find('input[name="QuestionItem[sort]"]').val(data.data.sort);
+				$("#questionItem-form").find('textarea[name="QuestionItem[title]"]').val(data.data.title);
+				$("#questionItem-form").find('select[name="QuestionItem[is_correct]"]').val(data.data.is_correct);
+				createItemEditor();
+				setTimeout(function () {
+					itemEditor.setContent(data.data.content ? data.data.content : '',false);
+				},500);
+				refreshChosen();
+				$('#questionItem-id').show();
+				$('#questionItemModal').modal('show');
+			}, 'get');
+		});
+		
 		$('.btn-edit-question').on('click', function (e) {
 			var qid = $(this).attr('data-id');
 			postRequest('/manage/question/ajax_info?id='+qid,{},function (data) {
@@ -389,8 +438,11 @@
 				$("#question-form").find('input[name="Question[sort]"]').val(data.data.sort);
 				$("#question-form").find('textarea[name="Question[title]"]').val(data.data.title);
 				$("#question-form").find('input[name="Question[score]"]').val((parseInt(data.data.score)/100).toFixed(2));
+				$("#question-form").find('select[name="Question[type]"]').val(data.data.type);
 				createQuestionEditor();
-				questionEditor.setContent(data.data.content ? data.data.content : '', false);
+				setTimeout(function () {
+					questionEditor.setContent(data.data.content ? data.data.content : '', false);
+				},500);
 				refreshChosen();
 				$('#question-id').show();
 				$('#questionModal').modal('show');
@@ -402,9 +454,37 @@
 			postRequest('/manage/question/ajax_items?id='+qid,{},function (data) {
 				$('#viewQuestionItemsModal-title').text(data.data.title);
 				$('.btn-create-question-item').attr('data-id',data.data.id);
+				//渲染
+				renderQuestionItems(data.data.id, data.items);
 			},'get');
 			$('#viewQuestionItemsModal').modal('show');
 		});
+		
+		var questionItemsCached = {};
+		var renderQuestionItems = function (questionId, items) {
+			if (questionItemsCached[questionId] == null) {
+				questionItemsCached[questionId] = {};
+			}
+			if (items == null || items.length <= 0) {
+				return;
+			}
+			for(var i = 0; i<items.length; i++) {
+				questionItemsCached[questionId]['id_' + items[i].id] = items[i];
+			}
+			var htmlTxt = "";
+			for(var k in questionItemsCached[questionId]) {
+				var item = questionItemsCached[questionId][k];
+				var tplTxt = $('#questionItemItem_Tpl').html();
+				tplTxt = tplTxt.replace("{{id}}", item.id);
+				tplTxt = tplTxt.replace("{{id}}", item.id);
+				tplTxt = tplTxt.replace("{{sort}}", item.sort);
+				tplTxt = tplTxt.replace("{{title}}", item.title);
+				tplTxt = tplTxt.replace("{{content}}", item.content);
+				tplTxt = tplTxt.replace("{{correct}}", item.is_correct==1?'是':'否');
+				htmlTxt += '<tr>'+ tplTxt + '</tr>';
+			}
+			$('#questionItems_TBody').html(htmlTxt);
+		}
 
 	});
 </script>

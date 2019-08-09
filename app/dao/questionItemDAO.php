@@ -35,4 +35,9 @@ class questionItemDAO extends baseDAO
 			'num' => ceil($cnt/$pageSize),
 		];
 	}
+	
+	public static function hasExistCorrectItem($questionId, $expectId = 0) {
+		$cnt = self::newInstance()->filter(['question_id'=>$questionId, 'is_correct'=>1, '!='=>['id'=>$expectId]])->count();
+		return $cnt > 0 ? true : false;
+	}
 }

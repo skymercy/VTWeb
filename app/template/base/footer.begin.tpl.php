@@ -67,13 +67,8 @@
 		}
 		loading = true;
 		var t = type || 'post';
-		$.ajax({
-			type: t,
-			contentType: false,
-			processData: false,
-			url: uri,
-			data: data,
-			success: function (resp) {
+		if (t != 'post') {
+			$.get(uri, data, function (resp) {
 				loading = false;
 				if (resp.error == 0) {
 					if (success) {
@@ -88,8 +83,32 @@
 				} else {
 					toastError(resp.message);
 				}
-			}
-		});
+			},'json');
+		} else {
+			$.ajax({
+				type: t,
+				contentType: false,
+				processData: false,
+				url: uri,
+				data: data,
+				success: function (resp) {
+					loading = false;
+					if (resp.error == 0) {
+						if (success) {
+							success(resp);
+						} else {
+							if (resp.redirectUri) {
+								window.location.href = resp.redirectUri;
+							} else {
+								window.location.reload();
+							}
+						}
+					} else {
+						toastError(resp.message);
+					}
+				}
+			});
+		}
 	}
 	var page = <?=(isset($searchData)&&isset($searchData['page'])) ? $searchData['page'] : 1?>;
 	var pageNum = <?=(isset($PRM['pages'])&&isset($PRM['pages']['num'])) ? $PRM['pages']['num'] : 1?>;

@@ -16,6 +16,7 @@ use app\dao\questionDAO;
 use app\dao\questionItemDAO;
 use app\dao\teacherDAO;
 use app\dao\userDAO;
+use app\model\question;
 use app\model\user;
 
 class questionItemAction extends baseAction
@@ -39,6 +40,11 @@ class questionItemAction extends baseAction
 	public function action_ajax_edit_post() {
 		if (self::request()->isPost()) {
 			$formData = $this->param('QuestionItem');
+			$questionId =  $formData['question_id'];
+			$question = App::$model->question($questionId);
+			if(!$question->exist()) {
+				return $this->json(['error'=>'-1','message'=>'非法数据']);
+			}
 			if ($formData['id'] && $formData['id'] > 0) {
 				$instance = App::$model->questionItem($formData['id']);
 				if (!$instance->exist()) {
@@ -48,10 +54,16 @@ class questionItemAction extends baseAction
 				$instance->content = $formData['content'];
 				$instance->sort = $formData['sort'];
 				$instance->is_correct = intval($formData['is_correct']);
+				if ($formData['is_correct'] == 1 && $question->type == question::Type_Select) {
+					if (questionItemDAO::hasExistCorrectItem($questionId, $instance->id)) {
+						return $this->json(['error'=>'-1','message'=>'单选题只允许有一个正确答案']);
+					}
+				}
 				$instance->updated_at = time();
 				$instance->save();
+				$attributes = $instance->attributes();
 			} else {
-				$data = [
+				$attributes = [
 					'title' => $formData['title'],
 					'content' => $formData['content'],
 					'question_id' => $formData['question_id'],
@@ -61,12 +73,18 @@ class questionItemAction extends baseAction
 					'created_at' => time(),
 					'updated_at' => time(),
 				];
-				$instanceId = questionItemDAO::newInstance()->add($data);
+				if ($attributes['is_correct'] == 1 && $question->type == question::Type_Select) {
+					if (questionItemDAO::hasExistCorrectItem($questionId)) {
+						return $this->json(['error'=>'-1','message'=>'单选题只允许有一个正确答案']);
+					}
+				}
+				$instanceId = questionItemDAO::newInstance()->add($attributes);
 				if (!$instanceId) {
 					return $this->json(['error'=>'-1','message'=>'操作失败']);
 				}
+				$attributes['id'] = $instanceId;
 			}
-			return $this->json(['error'=>0, 'message'=>'Success!']);
+			return $this->json(['error'=>0, 'message'=>'Success!', 'items' => [$attributes]]);
 		}
 		return $this->json(['error'=>'-1','message'=>'非法数据']);
 	}

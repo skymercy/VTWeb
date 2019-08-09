@@ -50,4 +50,8 @@ class question extends baseModel
 		$this->DAO = $this->questionDAO;
 		parent::__construct($id);
 	}
+	
+	public static function getTypeName($type) {
+		return isset(self::$TypeNames[$type]) ? self::$TypeNames[$type] : '未定义';
+	}
 }

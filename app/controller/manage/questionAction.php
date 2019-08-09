@@ -53,7 +53,7 @@ class questionAction extends baseAction
 		$searchData = $this->searchData;
 		$searchData['question_id'] = $instance->id;
 		$result = questionItemDAO::searchQuestionItem($searchData);
-		return $this->json(['error'=>0,'data'=> $data, 'items'=>$result['items']]);
+		return $this->json(['error'=>0,'data'=> $data, 'items'=>$result['rows']]);
 	}
 	
 	public function action_ajax_edit_post() {
@@ -66,6 +66,7 @@ class questionAction extends baseAction
 				}
 				$score = max(0, floatval($formData['score'])*100);
 				$instance->score = $score;
+				$instance->type = $formData['type'];
 				$instance->title = $formData['title'];
 				$instance->content = $formData['content'];
 				$instance->sort = $formData['sort'];
@@ -80,6 +81,7 @@ class questionAction extends baseAction
 					'content' => $formData['content'],
 					'course_id' => $formData['course_id'],
 					'score' => $score,
+					'type' => $formData['type'],
 					'sort' => $formData['sort'],
 					'is_correct' =>  intval($formData['is_correct']),
 					'status' => $formData['status'],
