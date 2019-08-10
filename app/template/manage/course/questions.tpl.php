@@ -74,6 +74,19 @@
 										<?php endforeach;?>
 										</tbody>
 									</table>
+									<div class="message-footer clearfix">
+										<div class="pull-left"> 共<?=$PRM['pages']['total']?>项</div>
+										<div class="pull-right">
+											<div class="inline middle"><?=$searchData['page']?>/<?=$PRM['pages']['num']?> </div>
+											<ul class="pagination middle">
+												<li><a href="javascript:gotoFirst()"><i class="ace-icon fa fa-step-backward middle"></i></a></li>
+												<li><a href="javascript:gotoPre()"><i class="ace-icon fa fa-caret-left bigger-140 middle"></i></a></li>
+												<li><span><input value="1" maxlength="3" type="text"></span></li>
+												<li><a href="javascript:gotoNext()"><i class="ace-icon fa fa-caret-right bigger-140 middle"></i></a></li>
+												<li><a href="javascript:gotoLast()"><i class="ace-icon fa fa-step-forward middle"></i></a></li>
+											</ul>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

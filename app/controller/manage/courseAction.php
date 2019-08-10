@@ -10,6 +10,7 @@ namespace app\controller\manage;
 
 use APP;
 use app\controller\manage\base\baseAction;
+use app\dao\classesCourseDAO;
 use app\dao\courseDAO;
 use app\dao\collegeDAO;
 use app\dao\questionDAO;
@@ -77,6 +78,30 @@ class courseAction extends baseAction
 		];
 		
 		return $this->display('manage/course/questions',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages]);
+	}
+	
+	public function action_classes() {
+		$this->setBreadcrumb('编辑课程班级', true);
+		$id = $this->param('id', 0);
+		if (empty($id)) {
+			return $this->error('出错了, 数据错误');
+		}
+		$instance = App::$model->course($id);
+		if (!$instance->exist()) {
+			return $this->error('出错了，数据错误');
+		}
+		
+		$renderData = $instance->attributes();
+		
+		$searchData = $this->searchData;
+		$searchData['course_id'] = $instance->id;
+		$result = classesCourseDAO::searchClassesCourse($searchData);
+		$pages = [
+			'total' => $result['total'],
+			'num' => $result['num'],
+		];
+		
+		return $this->display('manage/course/classes',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages]);
 	}
 	
 	public function action_ajax_edit_post() {

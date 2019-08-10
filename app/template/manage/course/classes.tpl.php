@@ -2,34 +2,42 @@
 <?php include App::$view_root . "/base/header.end.tpl.php" ?>
 
 <div class="page-content">
+	<div class="page-header">
+		<h1>
+			编辑[<span style="color: red;"><?=$PRM['course']['title']?></span>]的班级
+		</h1>
+		<div style="margin-top: 15px;">
+			<button class="btn btn-xs btn-warning btn-create-question">
+				<i class="ace-icon fa fa-plus bigger-110"></i>
+				添加班级
+			</button>
+		</div>
+	</div> <!-- /.page-header -->
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="row">
 				<table id="simple-table" class="table  table-bordered table-hover">
 					<thead>
 					<tr>
-						<th>ID</th>
-						<th>实验课程</th>
+						<th>班级ID</th>
+						<th>班级名</th>
+						<th>院系</th>
+						<th>上级院系</th>
 						<th>创建时间</th>
 						<th></th>
 					</tr>
 					</thead>
 					<tbody>
 					<?php foreach ($PRM['items'] as $item): ?>
-						<tr class="j-tag-item-<?=$item['id']?>">
-							<td class="j-item-id"><span><?=$item['id']?></span></td>
-							<td class="j-item-title"><span><?=$item['title']?></span></td>
-							<td class="j-item-created"><span><?=date('Y/m/d H:i:s', $item['created_at'])?></span></td>
+						<tr>
+							<td><span><?=$item['classes_id']?></span></td>
+							<td><span><?=$item['title']?></span></td>
+							<td><span><?=$item['title1']?></span></td>
+							<td><span><?=$item['title2']?></span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
-									<a href="/manage/course/edit/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑信息">
-										<i class="ace-icon fa fa-edit bigger-120"></i>编辑信息
-									</a>
-									<a href="/manage/course/questions/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑题库">
-										<i class="ace-icon fa fa-book bigger-120"></i>编辑题库
-									</a>
-									<a href="/manage/course/classes/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑班级">
-										<i class="ace-icon fa fa-book bigger-120"></i>编辑班级
+									<a href="javascript:;" class="btn btn-xs btn-info">
+										<i class="ace-icon fa fa-remove bigger-120"></i>删除
 									</a>
 								</div>
 							</td>
