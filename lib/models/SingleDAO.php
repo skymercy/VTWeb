@@ -201,7 +201,7 @@ class SingleDAO extends DAO
 									$_arrv = "'{$this->real_escape_string($_arrv)}'";
 								}
 							}
-							$where[] = "{$arrk}` not in  (".join(",", $arrv).")";
+							$where[] = "`{$arrk}` not in  (".join(",", $arrv).")";
 						}
 					}
 				} elseif ($key === '__like__'){
