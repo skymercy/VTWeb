@@ -22,8 +22,11 @@
 							<td class="j-item-created"><span><?=date('Y/m/d H:i:s', $item['created_at'])?></span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
-									<a href="/manage/course/edit/<?=$item['id']?>" class="btn btn-xs btn-info">
-										<i class="ace-icon fa fa-edit bigger-120"></i>
+									<a href="/manage/course/edit/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑信息">
+										<i class="ace-icon fa fa-edit bigger-120"></i>编辑信息
+									</a>
+									<a href="/manage/course/questions/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑题库">
+										<i class="ace-icon fa fa-book bigger-120"></i>编辑题库
 									</a>
 								</div>
 							</td>

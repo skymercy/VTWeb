@@ -52,6 +52,22 @@ class courseAction extends baseAction
 		
 		$renderData = $instance->attributes();
 		
+		return $this->display('manage/course/form',['course'=>$renderData ]);
+	}
+	
+	public function action_questions() {
+		$this->setBreadcrumb('编辑题库', true);
+		$id = $this->param('id', 0);
+		if (empty($id)) {
+			return $this->error('出错了, 数据错误');
+		}
+		$instance = App::$model->course($id);
+		if (!$instance->exist()) {
+			return $this->error('出错了，数据错误');
+		}
+		
+		$renderData = $instance->attributes();
+		
 		$searchData = $this->searchData;
 		$searchData['course_id'] = $instance->id;
 		$result = questionDAO::searchQuestion($searchData);
@@ -60,7 +76,7 @@ class courseAction extends baseAction
 			'num' => $result['num'],
 		];
 		
-		return $this->display('manage/course/form',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages]);
+		return $this->display('manage/course/questions',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages]);
 	}
 	
 	public function action_ajax_edit_post() {

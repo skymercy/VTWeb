@@ -14,6 +14,8 @@ return array(
 			'manage/college/edit/<id:\d+>' => 'manage/college/edit',
 			'manage/classes/edit/<id:\d+>' => 'manage/classes/edit',
 			'manage/course/edit/<id:\d+>' => 'manage/course/edit',
+			'manage/course/questions/<id:\d+>' => 'manage/course/questions',
+			'manage/course/classes/<id:\d+>' => 'manage/course/classes',
 			'manage/question/info/<id:\d+>' => 'manage/question/info',
         ),
     ),
