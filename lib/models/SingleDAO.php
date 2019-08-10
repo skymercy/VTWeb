@@ -192,6 +192,18 @@ class SingleDAO extends DAO
 						$arrv = $this->real_escape_string($arrv);
 						$where[] = "find_in_set('{$arrv}', `{$arrk}`)";
 					}
+				} elseif ($key === '__not_in__') {
+					foreach ($cond[$key] as $arrk => $arrv){
+						$arrk = $this->real_escape_string($arrk);
+						if (is_array($arrv) && count($arrv) > 0) {
+							foreach ($arrv as &$_arrv){
+								if (is_string($_arrv)){
+									$_arrv = "'{$this->real_escape_string($_arrv)}'";
+								}
+							}
+							$where[] = "{$arrk}` not in  (".join(",", $arrv).")";
+						}
+					}
 				} elseif ($key === '__like__'){
                     foreach ($cond[$key] as $arrk => $arrv){
                         $arrk = $this->real_escape_string($arrk);
