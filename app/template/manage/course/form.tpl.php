@@ -44,6 +44,11 @@
 									<i class="ace-icon fa fa-check bigger-110"></i>
 									<?=($PRM['course']['id'])?'保存修改':'创建实验课程'?>
 								</button>
+								<?php if ($PRM['course']['id']): ?>
+									<button class="btn btn-info btn-publish">
+										<i class="ace-icon fa fa-check bigger-110"></i>发布考试
+									</button>
+								<?php endif; ?>
 							</div>
 						</div>
 					</form>
@@ -67,11 +72,12 @@
 									<table id="question-table" class="table  table-bordered table-hover">
 										<thead>
 										<tr>
-											<th style="width: 10%;">ID</th>
-											<th style="width: 10%;">序号</th>
-											<th style="width: 50%;">题目</th>
-											<th style="width: 20%;">类型</th>
-											<th style="width: 20%;">操作</th>
+											<th style="width: 5%;">ID</th>
+											<th style="width: 5%;">序号</th>
+											<th style="width: 30%;">题目</th>
+											<th style="width: 10%;">类型</th>
+											<th style="width: 10%;">状态</th>
+											<th style="width: 10%;">操作</th>
 										</tr>
 										</thead>
 										<tbody>
@@ -81,6 +87,7 @@
 												<td class="j-item-sort"><span><?=$item['sort']?></span></td>
 												<td class="j-item-title"><span><?=$item['title']?></span></td>
 												<td class="j-item-type"><span><?=\app\model\question::getTypeName($item['type'])?></span></td>
+												<td class="j-item-title"><span><?=($item['status']==1)?'已加入试卷':'-'?></span></td>
 												<td>
 													<div class="hidden-sm hidden-xs btn-group">
 														<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
@@ -124,7 +131,40 @@
 		</td>
 	</tr>
 </table>
-
+	<!-- 题目选项列表模态框（Modal） -->
+	<div class="modal fade" id="publishQuestionModal" tabindex="-1" role="dialog" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content" style="background: transparent;">
+				<div class="widget-box">
+					<div class="widget-header">
+						<h5 class="widget-title">
+							发布考试
+						</h5>
+					</div>
+					<div class="widget-body">
+						<div class="widget-main">
+							<div class="row" style="  max-height: 300px; overflow-y: scroll;">
+								<table id="question-table" class="table  table-bordered table-hover">
+									<thead>
+									<tr>
+										<th style="width: 5%;">ID</th>
+										<th style="width: 5%;">序号</th>
+										<th style="width: 10%;">内容</th>
+										<th style="width: 50%;">内容2</th>
+										<th style="width: 10%">是否正确</th>
+										<th style="width: 10%;">操作</th>
+									</tr>
+									</thead>
+									<tbody id="questionItems_TBody">
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<!-- 题目选项列表模态框（Modal） -->
 	<div class="modal fade" id="viewQuestionItemsModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
@@ -439,6 +479,7 @@
 				$("#question-form").find('textarea[name="Question[title]"]').val(data.data.title);
 				$("#question-form").find('input[name="Question[score]"]').val((parseInt(data.data.score)/100).toFixed(2));
 				$("#question-form").find('select[name="Question[type]"]').val(data.data.type);
+				$("#question-form").find('select[name="Question[status]"]').val(data.data.status);
 				createQuestionEditor();
 				setTimeout(function () {
 					questionEditor.setContent(data.data.content ? data.data.content : '', false);
