@@ -20,19 +20,20 @@ class classesCourseDAO extends baseDAO
 		$offset = max(0, ($page-1)*$pageSize);
 
 		$cnt = self::newInstance()
-			->leftJoin(collegeDAO::newInstance(), ['college_id' => 'id'])
-			->leftJoin(collegeDAO::newInstance(), [['college_pid' => 'id']])
-			->leftJoin(classesDAO::newInstance(), [['classes_id' => 'id']])
-			->filter([$filters, [], []])
+			->leftJoin(classesDAO::newInstance(), ['classes_id' => 'id'])
+			->leftJoin(collegeDAO::newInstance(), [[],['college_id' => 'id']])
+			->leftJoin(collegeDAO::newInstance(), [[],['college_pid' => 'id']])
+			->filter([$filters, [], [],[]])
 			->count();
 
 		$rows = self::newInstance()
-			->leftJoin(collegeDAO::newInstance(), ['college_id' => 'id'])
-			->leftJoin(collegeDAO::newInstance(), [['college_pid' => 'id']])
-			->filter([$filters, [], []])
+			->leftJoin(classesDAO::newInstance(), ['classes_id' => 'id'])
+			->leftJoin(collegeDAO::newInstance(), [[],['college_id' => 'id']])
+			->leftJoin(collegeDAO::newInstance(), [[],['college_pid' => 'id']])
+			->filter([$filters, [], [], []])
 			->order( [['id' => 'desc']] )
 			->limit($pageSize, $offset)
-			->query('classes.title,college.title title1,college2.title title2');
+			->query('classesCourse.*,classes.title,college.title title1,college3.title title2');
 
 		return [
 			'total' => $cnt,

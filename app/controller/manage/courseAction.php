@@ -11,6 +11,7 @@ namespace app\controller\manage;
 use APP;
 use app\controller\manage\base\baseAction;
 use app\dao\classesCourseDAO;
+use app\dao\classesDAO;
 use app\dao\courseDAO;
 use app\dao\collegeDAO;
 use app\dao\questionDAO;
@@ -100,8 +101,12 @@ class courseAction extends baseAction
 			'total' => $result['total'],
 			'num' => $result['num'],
 		];
-		
-		return $this->display('manage/course/classes',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages]);
+		if (App::$model->user->role == user::Role_Administrator) {
+			$unbindClasses = classesDAO::getUnbindClassesData($id);
+		} else {
+			$unbindClasses = classesDAO::getUnbindClassesData($id, App::$model->user->id);
+		}
+		return $this->display('manage/course/classes',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages, 'unbindClasses'=>$unbindClasses]);
 	}
 	
 	public function action_ajax_edit_post() {
@@ -138,6 +143,28 @@ class courseAction extends baseAction
 				$redirectUri = $this->routerRoot() . "/course/edit/" . $instanceId;
 			}
 			return $this->json(['error'=>0, 'message'=>'Success!', 'redirectUri'=>$redirectUri]);
+		}
+		return $this->json(['error'=>'-1','message'=>'非法数据']);
+	}
+	
+	public function action_ajax_bind_classes() {
+		if (self::request()->isPost()) {
+			$formData = $this->param('ClassesCourse');
+			$numExist = classesCourseDAO::newInstance()->filter(['course_id'=>$formData['course_id'], 'classes_id'=>$formData['classes_id']])->count();
+			if ($numExist > 0) {
+				return $this->json(['error'=>'-1','message'=>'不需要重复添加']);
+			}
+			$data = [
+				'course_id' => $formData['course_id'],
+				'classes_id'=>$formData['classes_id'],
+				'created_by' => App::$model->user->id,
+				'created_at' => time(),
+			];
+			$instanceId = classesCourseDAO::newInstance()->add($data);
+			if (!$instanceId) {
+				return $this->json(['error'=>'-1','message'=>'操作失败']);
+			}
+			return $this->json(['error'=>0, 'message'=>'Success!']);
 		}
 		return $this->json(['error'=>'-1','message'=>'非法数据']);
 	}

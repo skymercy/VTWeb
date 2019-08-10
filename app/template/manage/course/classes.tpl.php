@@ -81,7 +81,7 @@
 										<label class="col-sm-2 control-label no-padding-left" > 班级 </label>
 										<div class="col-xs-10 col-sm-10">
 											<select class="chosen-select " id="form-field-status" name="ClassesCourse[classes_id]">
-												<?php foreach($PRM['classes'] as $k=>$v): ?>
+												<?php foreach($PRM['unbindClasses'] as $k=>$v): ?>
 													<option value="<?=$k?>" > <?=$v?> </option>
 												<?php endforeach;?>
 											</select>
@@ -107,6 +107,7 @@
 											
 <?php include App::$view_root . "/base/footer.begin.tpl.php" ?>
 <!-- inline scripts related to this page -->
+<script src="<?=$webRoot?>/assets/js/jquery.validate.min.js"></script>
 <script type="text/javascript">
 	$(function () {
 		$('#classesCourse-form').validate({
