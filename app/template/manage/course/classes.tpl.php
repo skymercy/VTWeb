@@ -6,15 +6,15 @@
 		<h1>
 			编辑[<span style="color: red;"><?=$PRM['course']['title']?></span>]的班级
 		</h1>
-		<div style="margin-top: 15px;">
-			<button class="btn btn-xs btn-warning btn-create-question">
-				<i class="ace-icon fa fa-plus bigger-110"></i>
-				添加班级
-			</button>
-		</div>
 	</div> <!-- /.page-header -->
 	<div class="row">
 		<div class="col-xs-12">
+			<div class="row" style="margin-bottom: 10px;">
+				<button class="btn btn-xs btn-warning btn-bind-classes">
+					<i class="ace-icon fa fa-plus bigger-110"></i>
+					添加班级
+				</button>
+			</div>
 			<div class="row">
 				<table id="simple-table" class="table  table-bordered table-hover">
 					<thead>
@@ -62,11 +62,76 @@
 		</div>
 	</div>
 </div>
+
+<!-- 添加班级模态框（Modal） -->
+<div class="modal fade" id="bindClassesModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content" style="background: transparent;">
+			<div class="widget-box">
+				<div class="widget-header">
+					<h5 class="widget-title">添加班级</h5>
+				</div>
+				<div class="widget-body">
+					<div class="widget-main">
+						<div class="row">
+							<div class="col-sm-12">
+								<form id="classesCourse-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
+									<input type="hidden" name="ClassesCourse[course_id]" value="<?=$PRM['course']['id']?>">
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-left" > 班级 </label>
+										<div class="col-xs-10 col-sm-10">
+											<select class="chosen-select " id="form-field-status" name="ClassesCourse[classes_id]">
+												<?php foreach($PRM['classes'] as $k=>$v): ?>
+													<option value="<?=$k?>" > <?=$v?> </option>
+												<?php endforeach;?>
+											</select>
+										</div>
+									</div>
+									<div class="clearfix form-actions">
+										<div class="col-md-offset-2 col-md-9">
+											<button class="btn btn-info" type="submit">
+												<i class="ace-icon fa fa-check bigger-110"></i>
+												保存
+											</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal -->
+</div>
+											
 <?php include App::$view_root . "/base/footer.begin.tpl.php" ?>
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
 	$(function () {
-	
+		$('#classesCourse-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			ignore: "",
+			rules: {
+				'ClassesCourse[course_id]': {
+					required: true
+				},
+				'ClassesCourse[classes_id]': {
+					required: true
+				}
+			},
+			submitHandler: function (form) {
+				postRequest('/manage/course/ajax_bind_classes', new FormData($('#classesCourse-form')[0]));
+			}
+		});
+
+		$('.btn-bind-classes').on('click', function (e) {
+			$('#bindClassesModal').modal('show');
+		});
+		
+		refreshChosen();
 	});
 </script>
 <?php include App::$view_root . "/base/footer.end.tpl.php" ?>

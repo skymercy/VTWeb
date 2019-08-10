@@ -2,6 +2,12 @@
 <?php include App::$view_root . "/base/header.end.tpl.php" ?>
 
 <div class="page-content">
+	<div class="row" style="margin-bottom: 10px;">
+		<a href="/manage/course/create" class="btn btn-xs btn-warning">
+			<i class="ace-icon fa fa-plus bigger-110"></i>
+			添加实验课程
+		</a>
+	</div>
 	<div class="row">
 		<div class="col-xs-12">
 			<div class="row">

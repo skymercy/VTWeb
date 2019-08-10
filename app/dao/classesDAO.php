@@ -39,4 +39,27 @@ class classesDAO extends baseDAO
 			'num' => ceil($cnt/$pageSize),
 		];
 	}
+	
+	public static function getUnbindClassesData($courseId, $createdBy = 0) {
+		$existClassesRows = classesCourseDAO::newInstance()->filter(['course_id'=>$courseId])->query();
+		$existClassesIdList = [];
+		foreach ($existClassesRows as $row) {
+			$existClassesIdList[] = $row['classes_id'];
+		}
+		$filters = [
+			'__not_in__' => ['id'=>$existClassesIdList],
+		];
+		if($createdBy > 0) {
+			$filters['created_by'] = $createdBy;
+		}
+		$unbindRows = self::newInstance()
+			->filter($filters)
+			->order(['id'=>'desc'])
+			->query();
+		$result = [];
+		foreach ($unbindRows as $row) {
+			$result[$row['id']] = $row['title'];
+		}
+		return $result;
+	}
 }

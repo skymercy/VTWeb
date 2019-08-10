@@ -23,73 +23,63 @@
 	</div> <!-- /.page-header -->
 	<div class="row">
 		<div class="col-xs-12">
+			<div class="row" style="margin-bottom: 10px;">
+				<button class="btn btn-xs btn-warning btn-create-question">
+					<i class="ace-icon fa fa-plus bigger-110"></i>
+					添加题目
+				</button>
+				<button class="btn btn-xs btn-info btn-publish">
+					<i class="ace-icon fa fa-check bigger-110"></i>
+					发布考试
+				</button>
+			</div>
 			<div class="row">
-				<div class="col-xs-12 widget-container-col">
-					<div class="widget-box">
-						<div class="widget-header">
-							<button class="btn btn-xs btn-warning btn-create-question">
-								<i class="ace-icon fa fa-plus bigger-110"></i>
-								添加题目
-							</button>
-							<button class="btn btn-xs btn-info btn-publish">
-								<i class="ace-icon fa fa-check bigger-110"></i>
-								发布考试
-							</button>
-						</div>
-						<div class="widget-body">
-							<div class="widget-main">
-								<div class="row" style="  max-height: 300px; overflow-y: scroll;">
-									<table id="question-table" class="table  table-bordered table-hover">
-										<thead>
-										<tr>
-											<th style="width: 5%;">ID</th>
-											<th style="width: 5%;">序号</th>
-											<th style="width: 30%;">题目</th>
-											<th style="width: 10%;">类型</th>
-											<th style="width: 10%;">状态</th>
-											<th style="width: 10%;">操作</th>
-										</tr>
-										</thead>
-										<tbody>
-										<?php foreach ($PRM['items'] as $item): ?>
-											<tr class="j-tag-item-<?=$item['id']?>">
-												<td class="j-item-id"><span><?=$item['id']?></span></td>
-												<td class="j-item-sort"><span><?=$item['sort']?></span></td>
-												<td class="j-item-title"><span><?=$item['title']?></span></td>
-												<td class="j-item-type"><span><?=\app\model\question::getTypeName($item['type'])?></span></td>
-												<td class="j-item-title"><span><?=($item['status']==1)?'已加入试卷':'-'?></span></td>
-												<td>
-													<div class="hidden-sm hidden-xs btn-group">
-														<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
-															<i class="ace-icon fa fa-edit bigger-120"></i>编辑
-														</a>
-														<?php if (in_array($item['type'], [\app\model\question::Type_Select, \app\model\question::Type_Select_Multiple])):?>
-															<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question-items" data-id="<?=$item['id']?>">
-																<i class="ace-icon fa fa-question bigger-120"></i>编辑选项
-															</a>
-														<?php endif;?>
-													</div>
-												</td>
-											</tr>
-										<?php endforeach;?>
-										</tbody>
-									</table>
-									<div class="message-footer clearfix">
-										<div class="pull-left"> 共<?=$PRM['pages']['total']?>项</div>
-										<div class="pull-right">
-											<div class="inline middle"><?=$searchData['page']?>/<?=$PRM['pages']['num']?> </div>
-											<ul class="pagination middle">
-												<li><a href="javascript:gotoFirst()"><i class="ace-icon fa fa-step-backward middle"></i></a></li>
-												<li><a href="javascript:gotoPre()"><i class="ace-icon fa fa-caret-left bigger-140 middle"></i></a></li>
-												<li><span><input value="1" maxlength="3" type="text"></span></li>
-												<li><a href="javascript:gotoNext()"><i class="ace-icon fa fa-caret-right bigger-140 middle"></i></a></li>
-												<li><a href="javascript:gotoLast()"><i class="ace-icon fa fa-step-forward middle"></i></a></li>
-											</ul>
-										</div>
-									</div>
+				<table id="question-table" class="table  table-bordered table-hover">
+					<thead>
+					<tr>
+						<th style="width: 5%;">ID</th>
+						<th style="width: 5%;">序号</th>
+						<th style="width: 30%;">题目</th>
+						<th style="width: 10%;">类型</th>
+						<th style="width: 10%;">状态</th>
+						<th style="width: 10%;">操作</th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php foreach ($PRM['items'] as $item): ?>
+						<tr class="j-tag-item-<?=$item['id']?>">
+							<td class="j-item-id"><span><?=$item['id']?></span></td>
+							<td class="j-item-sort"><span><?=$item['sort']?></span></td>
+							<td class="j-item-title"><span><?=$item['title']?></span></td>
+							<td class="j-item-type"><span><?=\app\model\question::getTypeName($item['type'])?></span></td>
+							<td class="j-item-title"><span><?=($item['status']==1)?'已加入试卷':'-'?></span></td>
+							<td>
+								<div class="hidden-sm hidden-xs btn-group">
+									<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question" data-id="<?=$item['id']?>">
+										<i class="ace-icon fa fa-edit bigger-120"></i>编辑
+									</a>
+									<?php if (in_array($item['type'], [\app\model\question::Type_Select, \app\model\question::Type_Select_Multiple])):?>
+										<a href="javascript:;" class="btn btn-xs btn-info btn-edit-question-items" data-id="<?=$item['id']?>">
+											<i class="ace-icon fa fa-question bigger-120"></i>编辑选项
+										</a>
+									<?php endif;?>
 								</div>
-							</div>
-						</div>
+							</td>
+						</tr>
+					<?php endforeach;?>
+					</tbody>
+				</table>
+				<div class="message-footer clearfix">
+					<div class="pull-left"> 共<?=$PRM['pages']['total']?>项</div>
+					<div class="pull-right">
+						<div class="inline middle"><?=$searchData['page']?>/<?=$PRM['pages']['num']?> </div>
+						<ul class="pagination middle">
+							<li><a href="javascript:gotoFirst()"><i class="ace-icon fa fa-step-backward middle"></i></a></li>
+							<li><a href="javascript:gotoPre()"><i class="ace-icon fa fa-caret-left bigger-140 middle"></i></a></li>
+							<li><span><input value="1" maxlength="3" type="text"></span></li>
+							<li><a href="javascript:gotoNext()"><i class="ace-icon fa fa-caret-right bigger-140 middle"></i></a></li>
+							<li><a href="javascript:gotoLast()"><i class="ace-icon fa fa-step-forward middle"></i></a></li>
+						</ul>
 					</div>
 				</div>
 			</div>
