@@ -14,9 +14,13 @@ use app\dao\classesCourseDAO;
 use app\dao\classesDAO;
 use app\dao\courseDAO;
 use app\dao\collegeDAO;
+use app\dao\examClassesDAO;
+use app\dao\examDAO;
 use app\dao\questionDAO;
+use app\dao\questionItemDAO;
 use app\dao\teacherDAO;
 use app\dao\userDAO;
+use app\model\question;
 use app\model\user;
 
 class courseAction extends baseAction
@@ -109,6 +113,16 @@ class courseAction extends baseAction
 		return $this->display('manage/course/classes',['course'=>$renderData, 'items' => $result['rows'], 'pages'=>$pages, 'unbindClasses'=>$unbindClasses]);
 	}
 	
+	public function action_exam() {
+		$this->setBreadcrumb('考试管理', true);
+		$result = examDAO::searchExam($this->searchData);
+		$pages = [
+			'total' => $result['total'],
+			'num' => $result['num'],
+		];
+		return $this->display('manage/course/exam', ['items' => $result['rows'], 'pages'=>$pages]);
+	}
+	
 	public function action_ajax_edit_post() {
 		if (self::request()->isPost()) {
 			$formData = $this->param('Course');
@@ -163,6 +177,117 @@ class courseAction extends baseAction
 			$instanceId = classesCourseDAO::newInstance()->add($data);
 			if (!$instanceId) {
 				return $this->json(['error'=>'-1','message'=>'操作失败']);
+			}
+			return $this->json(['error'=>0, 'message'=>'Success!']);
+		}
+		return $this->json(['error'=>'-1','message'=>'非法数据']);
+	}
+	
+	public function action_ajax_check_publish() {
+		$id = $this->param('id', 0);
+		if (empty($id)) {
+			return $this->json(['error'=>'-1','message'=>'非法数据']);
+		}
+		$instance = App::$model->course($id);
+		if (!$instance->exist()) {
+			return $this->json(['error'=>'-1','message'=>'非法数据']);
+		}
+		
+		$renderData = $instance->attributes();
+		
+		$checkInfo = courseDAO::checkCoursePublishInfo($id);
+
+		$renderData['total_score'] = floatval($checkInfo['total']/100);
+		if (App::$model->user->role == user::Role_Administrator) {
+			$unbindClasses = examClassesDAO::getUnbindClassesData($id, -1);
+		} else {
+			$unbindClasses = examClassesDAO::getUnbindClassesData($id,-1, App::$model->user->id);
+		}
+		return $this->json(['error'=>'0','data'=>$renderData, 'errors'=>$checkInfo['errors'],'warnings'=>$checkInfo['warnings'],'classes' => $unbindClasses]);
+	}
+	
+	/**
+	 * @return \biny\lib\JSONResponse
+	 */
+	public function action_ajax_publish()
+	{
+		if (self::request()->isPost()) {
+			$formData = $this->param('Exam');
+			if ($formData['id']) {
+				$instance = App::$model->exam($formData['id']);
+				if (!$instance->exist()) {
+					return $this->json(['error'=>'-1','message'=>'出错了，数据不存在或已删除']);
+				}
+				$start_at = strtotime(sprintf("%s %s:00", $formData['start_date'], $formData['start_time']));
+				$end_at = strtotime(sprintf("%s %s:00", $formData['end_date'], $formData['end_time']));
+				if ($start_at < 0 || $end_at < $start_at) {
+					return $this->json(['error'=>'-1','message'=>'发布失败，考试时间起止错误']);
+				}
+				if ($end_at - $start_at < $formData['duration']) {
+					return $this->json(['error'=>'-1','message'=>'发布失败，考试时间起止时间间隔小于设置的考试时长']);
+				}
+				$instance->duration = $formData['duration'];
+				$instance->start_at = $start_at;
+				$instance->end_at = $end_at;
+				$instance->title = $formData['title'];
+				$instance->save();
+				
+				$classes = $formData['classes'];
+				examClassesDAO::newInstance()->filter(['exam_id'=>$instance->id])->delete();
+				foreach ($classes as $_row) {
+					examClassesDAO::newInstance()->add([
+						'classes_id' => $_row,
+						'exam_id' => $instance->id,
+						'created_by' => App::$model->user->id,
+						'created_at' => time(),
+					]);
+				}
+			} else {
+				$courseId = $formData['course_id'];
+				$courseInstance = App::$model->course($courseId);
+				if (!$courseInstance->exist()) {
+					return $this->json(['error'=>'-1','message'=>'非法数据']);
+				}
+				$checkInfo = courseDAO::checkCoursePublishInfo($courseId);
+				if (count($checkInfo['errors']) > 0) {
+					return $this->json(['error'=>'-1','message'=>'发布失败，题库存在错误数据']);
+				}
+				$start_at = strtotime(sprintf("%s %s:00", $formData['start_date'], $formData['start_time']));
+				$end_at = strtotime(sprintf("%s %s:00", $formData['end_date'], $formData['end_time']));
+				if ($start_at < 0 || $end_at < $start_at) {
+					return $this->json(['error'=>'-1','message'=>'发布失败，考试时间起止错误']);
+				}
+				if ($end_at - $start_at < $formData['duration']) {
+					return $this->json(['error'=>'-1','message'=>'发布失败，考试时间起止时间间隔小于设置的考试时长']);
+				}
+				
+				$data = [
+					'course_id' => $courseId,
+					'title' => $formData['title'],
+					'total' => $checkInfo['total'],
+					'duration' => $formData['duration'],
+					'start_at' => $start_at,
+					'end_at' => $end_at,
+					'created_by' => App::$model->user->id,
+					'created_at' => time(),
+				];
+				
+				$instanceId = examDAO::newInstance()->add($data);
+				if (!$instanceId) {
+					return $this->json(['error'=>'-1','message'=>'操作失败']);
+				}
+				
+				examDAO::applyExamDetail($instanceId, $courseId);
+				
+				$classes = $formData['classes'];
+				foreach ($classes as $_row) {
+					examClassesDAO::newInstance()->add([
+						'classes_id' => $_row,
+						'exam_id' => $instanceId,
+						'created_by' => App::$model->user->id,
+						'created_at' => time(),
+					]);
+				}
 			}
 			return $this->json(['error'=>0, 'message'=>'Success!']);
 		}

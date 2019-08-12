@@ -40,4 +40,15 @@ class questionItemDAO extends baseDAO
 		$cnt = self::newInstance()->filter(['question_id'=>$questionId, 'is_correct'=>1, '!='=>['id'=>$expectId]])->count();
 		return $cnt > 0 ? true : false;
 	}
+	
+	public static function getCorrectItemCount($questionId) {
+		$cnt = self::newInstance()->filter(['question_id'=>$questionId, 'is_correct'=>1])->count();
+		return $cnt;
+	}
+	
+	public static function getItems($questionId) {
+		return self::newInstance()->filter(['question_id'=>$questionId])
+			->order(['sort'=>'asc','id'=>'desc'])
+			->query();
+	}
 }

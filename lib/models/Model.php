@@ -28,6 +28,9 @@ use ReflectionException;
  * @property app\model\classesCourse $classesCourse
  * @property app\model\question $question
  * @property app\model\questionItem $questionItem
+ * @property app\model\exam $exam
+ * @property app\model\examQuestion $examQuestion
+ * @property app\model\examClasses $examClasses
  *
  * @method app\model\user user($id)
  * @method app\model\student student($id)
@@ -38,6 +41,9 @@ use ReflectionException;
  * @method app\model\classesCourse classesCourse($id)
  * @method app\model\question question($id)
  * @method app\model\questionItem questionItem($id)
+ * @method app\model\exam exam($id)
+ * @method app\model\examQuestion examQuestion($id)
+ * @method app\model\examClasses examClasses($id)
  */
 class Model
 {

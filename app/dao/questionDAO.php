@@ -2,6 +2,8 @@
 
 namespace app\dao;
 
+use app\model\question;
+
 class questionDAO extends baseDAO
 {
     protected $table = 'question';
@@ -34,5 +36,13 @@ class questionDAO extends baseDAO
 			'rows' => $rows,
 			'num' => ceil($cnt/$pageSize),
 		];
+	}
+	
+	public static function getAllPublishedQuestion($courseId) {
+		$rows = self::newInstance()
+			->filter(['course_id'=>$courseId, 'status'=>question::Status_Published])
+			->order(['sort'=>'asc','id'=>'desc'])
+			->query();
+		return $rows;
 	}
 }

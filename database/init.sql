@@ -125,3 +125,48 @@ CREATE TABLE `question_item` (
   PRIMARY KEY (`id`),
   INDEX `idx-question` (`question_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/**考试*/
+DROP TABLE IF EXISTS `exam`;
+CREATE TABLE `exam` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `course_id` INT(11) NOT NULL DEFAULT '0',
+  `title` VARCHAR(100) NOT NULL DEFAULT '',
+  `total` INT(11) NOT NULL DEFAULT '0',
+  `start_at` INT(11) NOT NULL DEFAULT '0',
+  `end_at` INT(11) NOT NULL DEFAULT '0',
+  `duration` INT(11) NOT NULL DEFAULT '0' COMMENT '持续时间,单位秒',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  INDEX `idx-course` (`course_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `exam_classes`;
+CREATE TABLE `exam_classes` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `exam_id` INT(11) NOT NULL,
+  `classes_id` INT(11) NOT NULL,
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `u_exam_classes` (`exam_id`,`classes_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `exam_question`;
+CREATE TABLE `exam_question` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `exam_id` INT(11) NOT NULL DEFAULT '0',
+  `src_id` INT(11) NOT NULL DEFAULT '0' COMMENT '来源id',
+  `type` INT(11) NOT NULL DEFAULT '0' COMMENT '1单选题 2多选题 3判断 4填空 5简答题',
+  `title` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '标题',
+  `content` TEXT,
+  `is_correct` SMALLINT NOT NULL DEFAULT '0' COMMENT '判断题该字段有效',
+  `items` TEXT,
+  `score` SMALLINT NOT NULL DEFAULT '0' COMMENT '问题分数',
+  `sort` INT(11) NOT NULL DEFAULT '0' COMMENT '排序',
+  `created_by` INT(11) NOT NULL DEFAULT '0',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  INDEX `idx-exam` (`exam_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

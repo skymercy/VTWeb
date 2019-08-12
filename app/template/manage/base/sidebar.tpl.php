@@ -76,6 +76,12 @@
 					实验课程列表
 				</a>
 			</li>
+			<li class="<?=(isset($sidebar['course-exam'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/exam">
+					<i class="menu-icon fa fa-caret-right"></i>
+					考试管理
+				</a>
+			</li>
 		</ul>
 	</li>
 	<li class="<?=(isset($sidebar['college'])? 'active open' : '')?>">

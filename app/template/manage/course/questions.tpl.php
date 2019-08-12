@@ -115,7 +115,65 @@
 					</div>
 					<div class="widget-body">
 						<div class="widget-main">
-							<div class="row" style="  max-height: 300px; overflow-y: scroll;">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="j-publish-errors">
+									
+									</div>
+								</div>
+								<div class="col-sm-12">
+									<form id="exam-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
+										<input type="hidden" name="Exam[course_id]" value="<?=$PRM['course']['id']?>">
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" > 标题 </label>
+											<div class="col-sm-10 col-sm-9">
+												<input type="text" class="form-control" name="Exam[title]">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" >考试时长</label>
+											<div class="col-xs-10  col-sm-3">
+												<select class="chosen-select" name="Exam[duration]">
+													<option value="1800">0.5小时</option>
+													<option value="3600">1小时</option>
+													<option value="5400">1.5小时</option>
+													<option value="7200">2小时</option>
+													<option value="9000">2.5小时</option>
+													<option value="10800">3小时</option>
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" >考试班级</label>
+											<div class="col-xs-10  col-sm-10">
+												<select class="chosen-select j-exam-classes" name="Exam[classes][]" multiple="multiple">
+												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" >开始时间</label>
+											<div class="col-xs-10  col-sm-9">
+												<input type="date" name="Exam[start_date]">
+												<input type="time" name="Exam[start_time]">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-2 control-label no-padding-left" >结束时间</label>
+											<div class="col-xs-10  col-sm-9">
+												<input type="date" name="Exam[end_date]">
+												<input type="time" name="Exam[end_time]">
+											</div>
+										</div>
+										<div class="clearfix form-actions">
+											<div class="col-md-offset-2 col-md-9">
+												<button class="btn btn-info" type="submit">
+													<i class="ace-icon fa fa-check bigger-110"></i>
+													发布
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -323,6 +381,7 @@
 <script type="text/javascript" charset="utf-8" src="<?=$webRoot?>/ueditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript">
 	$(function () {
+		var courseId = <?=$PRM['course']['id']?>;
 		var questionEditor = null;
 		var itemEditor = null;
 		
@@ -347,6 +406,17 @@
 				postRequest('/manage/question/ajax_edit_post', formData);
 			}
 		});
+		
+		$('#exam-form').validate({
+			errorElement: 'div',
+			errorClass: 'help-block',
+			focusInvalid: false,
+			ignore: "",
+			submitHandler: function (form) {
+				var formData = new FormData($('#exam-form')[0]);
+				postRequest('/manage/course/ajax_publish', formData);
+			}
+		})
 
 		$('#questionItem-form').validate({
 			errorElement: 'div',
@@ -381,6 +451,34 @@
 			refreshChosen();
 			$('#question-id').hide();
 			$('#questionModal').modal('show');
+		});
+		
+		$('.btn-publish').on('click', function(){
+			postRequest('/manage/course/ajax_check_publish?id='+courseId,{},function (data) {
+				$("#exam-form")[0].reset();
+				$(".j-publish-errors").empty();
+				$(".j-publish-errors").append('<p>总分:'+data.data.total_score+'</p>');
+				if (data.errors.length > 0) {
+					for(var k in data.errors) {
+						$(".j-publish-errors").append(data.errors[k]);
+					}
+				}
+				if (data.warnings.length > 0) {
+					for(var k in data.warnings) {
+						$(".j-publish-errors").append(data.warnings[k]);
+					}
+				}
+				if (data.classes) {
+					var optionHtml = '';
+					for(var k in data.classes) {
+						optionHtml += '<option value="'+k+'">'+data.classes[k]+'</option>';
+					}
+					console.log(optionHtml);
+					$('.j-exam-classes').html(optionHtml);
+				}
+				refreshChosen();
+				$('#publishQuestionModal').modal('show');
+			},'get');
 		});
 
 		$('.btn-create-question-item').on('click', function (e) {
