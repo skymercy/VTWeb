@@ -12,6 +12,7 @@ namespace app\model;
  * Class classes
  *
  * @property string $title
+ * @property int $course_id
  * @property int $total
  * @property int $start_at
  * @property int $end_at

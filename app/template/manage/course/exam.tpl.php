@@ -80,7 +80,7 @@
 				<div class="widget-box">
 					<div class="widget-header">
 						<h5 class="widget-title">
-							发布考试
+							编辑考试信息
 						</h5>
 					</div>
 					<div class="widget-body">
@@ -93,7 +93,8 @@
 								</div>
 								<div class="col-sm-12">
 									<form id="exam-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
-										<input type="hidden" name="Exam[course_id]" value="<?=$PRM['course']['id']?>">
+										<input type="hidden" name="Exam[id]" value="0">
+										<input type="hidden" name="Exam[course_id]" value="0">
 										<div class="form-group">
 											<label class="col-sm-2 control-label no-padding-left" > 标题 </label>
 											<div class="col-sm-10 col-sm-9">
@@ -138,7 +139,7 @@
 											<div class="col-md-offset-2 col-md-9">
 												<button class="btn btn-info" type="submit">
 													<i class="ace-icon fa fa-check bigger-110"></i>
-													发布
+													保存
 												</button>
 											</div>
 										</div>
@@ -158,7 +159,6 @@
 <script src="<?=$webRoot?>/assets/js/jquery.validate.min.js"></script>
 <script type="text/javascript">
 	$(function () {
-		var courseId = <?=$PRM['course']['id']?>;
 		
 		$('#exam-form').validate({
 			errorElement: 'div',
@@ -167,12 +167,37 @@
 			ignore: "",
 			submitHandler: function (form) {
 				var formData = new FormData($('#exam-form')[0]);
-				postRequest('/manage/course/ajax_publish', formData);
+				postRequest('/manage/exam/ajax_edit_post', formData);
 			}
 		})
 		
 		$('.btn-edit-exam').on('click', function(){
-			$('#publishQuestionModal').modal('show');
+			var examId = $(this).attr('data-id');
+			postRequest('/manage/exam/ajax_info?id='+examId,{},function(data){
+				$("#exam-form")[0].reset();
+				$("#exam-form").find('input[name="Exam[id]"]').val(data.data.id);
+				$("#exam-form").find('input[name="Exam[course_id]"]').val(data.data.course_id);
+				$("#exam-form").find('input[name="Exam[title]"]').val(data.data.title);
+				$("#exam-form").find('input[name="Exam[start_date]"]').val(data.data.start_date);
+				$("#exam-form").find('input[name="Exam[start_time]"]').val(data.data.start_time);
+				$("#exam-form").find('input[name="Exam[end_date]"]').val(data.data.end_date);
+				$("#exam-form").find('input[name="Exam[end_time]"]').val(data.data.end_time);
+				$("#exam-form").find('select[name="Exam[duration]"]').val(data.data.duration);
+				if (data.classes) {
+					var optionHtml = '';
+					for(var k in data.classes) {
+						if (data.data.classes[k]) {
+							optionHtml += '<option value="'+k+'" selected>'+data.classes[k]+'</option>';
+						} else {
+							optionHtml += '<option value="'+k+'">'+data.classes[k]+'</option>';
+						}
+						
+					}
+					$('.j-exam-classes').html(optionHtml);
+				}
+				refreshChosen();
+				$('#publishQuestionModal').modal('show');
+			},'get')
 		});
 
 	});
