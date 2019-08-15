@@ -47,7 +47,13 @@
         try{ace.settings.loadState('main-container')}catch(e){}
     </script>
     <div id="sidebar" class="sidebar responsive ace-save-state">
-		<?php include App::$view_root . $tplRoot . "/base/sidebar.tpl.php" ?>
+		<?php
+			if ($tplRoot == '/student' && isset($sidebar['exam-edit'])) {
+				include App::$view_root . $tplRoot . "/base/exam-nav.tpl.php";
+			} else {
+				include App::$view_root . $tplRoot . "/base/sidebar.tpl.php";
+			}
+		?>
     </div>
     <div class="main-content">
         <div class="main-content-inner">
@@ -55,7 +61,7 @@
                 <ul class="breadcrumb">
                     <li>
                         <i class="ace-icon fa fa-home home-icon"></i>
-                        <a href="<?=$routerRoot?>">首页</a>
+                        <a href="/">首页</a>
                     </li>
                     <?php foreach ($breadcrumbs as $breadcrumb): ?>
                         <?php if($breadcrumb['active']): ?>

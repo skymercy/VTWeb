@@ -12,6 +12,7 @@ use APP;
 use app\controller\base\baseAction;
 use app\dao\classesCourseDAO;
 use app\dao\examClassesDAO;
+use app\dao\examDAO;
 use app\model\user;
 
 class examAction extends baseAction
@@ -34,10 +35,10 @@ class examAction extends baseAction
 				exit("非法请求");
 		}
 		parent::init();
-		$this->setBreadcrumb('我的');
 	}
 	
 	public function action_index() {
+		$this->setBreadcrumb('我的');
 		$this->setBreadcrumb('课程列表', true);
 		
 		$student = App::$model->student(App::$model->user->id);
@@ -49,5 +50,30 @@ class examAction extends baseAction
 			'num' => $result['num'],
 		];
 		return $this->display('student/exam/index', ['items' => $result['rows'], 'pages'=>$pages]);
+	}
+	
+	public function action_edit() {
+		$id = $this->param('id', 0);
+		if (empty($id)) {
+			$examId = $this->param('examId', 0);
+			if (empty($examId)) {
+				return $this->error('出错了, 数据错误');
+			}
+		} else {
+			$instance = App::$model->examResult($id);
+			if (!$instance->exist()) {
+				return $this->error('出错了，数据错误');
+			}
+			$examId = $instance->exam_id;
+		}
+		$examInstance = \App::$model->exam($examId);
+		if (!$examInstance->exist()) {
+			return $this->error('出错了, 数据错误');
+		}
+		$this->setBreadcrumb('考试');
+		$this->setBreadcrumb($examInstance->title, true);
+		$examData = examDAO::getExamData($examId);
+		
+		return $this->display('student/exam/form', ['exam'=>$examData]);
 	}
 }

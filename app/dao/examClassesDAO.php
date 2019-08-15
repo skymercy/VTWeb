@@ -18,20 +18,25 @@ class examClassesDAO extends baseDAO
 		unset($filters['pageSize']);
 	
 		$offset = max(0, ($page-1)*$pageSize);
+		
+		$uid = $filters['uid'];
+		unset($filters['uid']);
 	
 		$cnt = self::newInstance()
 			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
 			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
-			->filter([$filters, [], []])
+			->leftJoin(examResultDAO::newInstance(),[['exam_id'=>'exam_id']])
+			->filter([$filters, [], [], ['uid'=>$uid]])
 			->count();
 	
 		$rows = self::newInstance()
 			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
 			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
-			->filter([$filters, [], []])
+			->leftJoin(examResultDAO::newInstance(),[['exam_id'=>'exam_id']])
+			->filter([$filters, [], [], ['uid'=>$uid]])
 			->order( [['id' => 'desc']] )
 			->limit($pageSize, $offset)
-			->query('exam.*,course.title course_title');
+			->query('exam.*,course.title course_title,examResult.id result_id,examResult.score,examResult.status');
 	
 		return [
 			'total' => $cnt,

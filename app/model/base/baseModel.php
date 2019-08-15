@@ -33,6 +33,7 @@ use biny\lib\BinyString;
  * @property \app\dao\examDAO $examDAO
  * @property \app\dao\examClassesDAO $examClassesDAO
  * @property \app\dao\examQuestionDAO $examQuestionDAO
+ * @property \app\dao\examResultDAO $examResultDAO
  *
  * @package app\model
  */

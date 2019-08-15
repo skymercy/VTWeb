@@ -30,9 +30,27 @@
 							<td><span><?=date('Y/m/d H:i',$item['start_at'])?> - <?=date('Y/m/d H:i',$item['end_at'])?></span></td>
 							<td><span><?=sprintf("%0.2f",$item['duration']/3600 )?>小时</span></td>
 							<td><span><?=date('Y/m/d H:i',$item['created_at'])?></span></td>
-							<td></td>
-							<td></td>
-							<td></td>
+							<td><span><?=\app\model\examResult::getStatusName($item['status'])?></span> </td>
+							<td><span><?=($item['status']==\app\model\examResult::Status_Check)?$item['score']:'--'?></span></td>
+							<td>
+								<div class="hidden-sm hidden-xs btn-group">
+									<?php if (is_null($item['status'])):?>
+									<a href="/exam/edit?examId=<?=$item['id']?>" class="btn btn-xs btn-info" title="去答题">
+										<i class="ace-icon fa fa-edit bigger-120"></i>去答题
+									</a>
+									<?php endif;?>
+									<?php if ($item['status'] === \app\model\examResult::Status_Doing):?>
+										<a href="/exam/edit/<?=$item['result_id']?>" class="btn btn-xs btn-info" title="继续答题">
+											<i class="ace-icon fa fa-edit bigger-120"></i>继续答题
+										</a>
+									<?php endif;?>
+									<?php if ($item['status'] === \app\model\examResult::Status_Submit || $item['status'] === \app\model\examResult::Status_Check):?>
+										<a href="/exam/view/<?=$item['result_id']?>" class="btn btn-xs btn-info" title="查看">
+											<i class="ace-icon fa fa-edit bigger-120"></i>查看
+										</a>
+									<?php endif;?>
+								</div>
+							</td>
 						</tr>
 					<?php endforeach;?>
 					</tbody>

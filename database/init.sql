@@ -170,3 +170,18 @@ CREATE TABLE `exam_question` (
   PRIMARY KEY (`id`),
   INDEX `idx-exam` (`exam_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `exam_result`;
+CREATE TABLE `exam_result` (
+  `id` INT(11) NOT NULL  AUTO_INCREMENT COMMENT 'id',
+  `uid` INT(11) NOT NULL  DEFAULT '0',
+  `exam_id` INT(11) NOT NULL  DEFAULT '0',
+  `content` TEXT,
+  `score` INT(11) NOT NULL DEFAULT '0' COMMENT '得分',
+  `start_at` INT(11) NOT NULL DEFAULT '0',
+  `end_at` INT(11) NOT NULL DEFAULT '0',
+  `status` SMALLINT NOT NULL DEFAULT '0' COMMENT '0未交卷 1交卷未打分 2交卷已打分',
+  PRIMARY KEY (`id`),
+  INDEX `idx-uid` (`uid`),
+  INDEX `idx-exam` (`exam_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

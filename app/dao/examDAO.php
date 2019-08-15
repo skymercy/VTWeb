@@ -3,6 +3,7 @@
 namespace app\dao;
 
 use app\model\examQuestion;
+use app\model\question;
 
 class examDAO extends baseDAO
 {
@@ -84,5 +85,19 @@ class examDAO extends baseDAO
 				'created_at' => time(),
 			]);
 		}
+	}
+	
+	public static function getExamData($examId, $examResultId = 0) {
+		$questions = examQuestionDAO::newInstance()->filter(['exam_id'=>$examId])->order(['type'=>'asc','sort'=>'asc','id'=>'desc'])->query();
+		$result = [];
+		foreach ($questions as $question) {
+			$type = $question['type'];
+			if (!isset($result[$type])) {
+				$result[$type] = [];
+			}
+			$question['items'] = json_decode($question['items'], true);
+			$result[$type][$question['id']] = $question;
+		}
+		return $result;
 	}
 }

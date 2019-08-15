@@ -41,6 +41,7 @@
 						<th style="width: 5%;">序号</th>
 						<th style="width: 30%;">题目</th>
 						<th style="width: 10%;">类型</th>
+						<th style="width: 10%;">分值</th>
 						<th style="width: 10%;">状态</th>
 						<th style="width: 10%;">操作</th>
 					</tr>
@@ -52,6 +53,7 @@
 							<td class="j-item-sort"><span><?=$item['sort']?></span></td>
 							<td class="j-item-title"><span><?=$item['title']?></span></td>
 							<td class="j-item-type"><span><?=\app\model\question::getTypeName($item['type'])?></span></td>
+							<td class="j-item-title"><span><?=sprintf("%0.2f",$item['score']/100 )?>分</span></span></td>
 							<td class="j-item-title"><span><?=($item['status']==1)?'已加入试卷':'-'?></span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
@@ -551,6 +553,7 @@
 				questionItemsCached[questionId] = {};
 			}
 			if (items == null || items.length <= 0) {
+				$('#questionItems_TBody').html('');
 				return;
 			}
 			for(var i = 0; i<items.length; i++) {
