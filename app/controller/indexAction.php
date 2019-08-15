@@ -32,5 +32,6 @@ class indexAction extends baseAction
 			default:
 				exit("非法请求");
 		}
+		return $this->display('student/index/index');
 	}
 }

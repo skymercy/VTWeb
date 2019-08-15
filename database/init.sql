@@ -27,7 +27,7 @@ DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `uid` INT(11) NOT NULL COMMENT 'user表的id',
   `student_no` VARCHAR(50) NOT NULL COMMENT '学生学号',
-  `classes_id` VARCHAR(50) NOT NULL COMMENT '所属班级',
+  `classes_id` INT(11) NOT NULL COMMENT '所属班级',
   `updated_at` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`),
   INDEX `idx-classes` (`classes_id`)

@@ -8,7 +8,14 @@
 
 namespace app\model;
 
-
+/**
+ * Class student
+ *
+ * @property string $student_no
+ * @property int $classes_id
+ *
+ * @package app\model
+ */
 class student extends baseModel
 {
 	protected function __construct($id)

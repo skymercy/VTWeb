@@ -7,6 +7,38 @@ class classesCourseDAO extends baseDAO
     protected $table = 'classes_course';
     protected $_pk = 'id';
     protected $_pkCache = true;
+    
+    public static function searchStudentCourse($searchData) {
+		$filters = $searchData;
+	
+		$page = $filters['page'];
+		$pageSize = $filters['pageSize'];
+	
+		unset($filters['page']);
+		unset($filters['pageSize']);
+	
+		$offset = max(0, ($page-1)*$pageSize);
+	
+		$cnt = self::newInstance()
+			->leftJoin(courseDAO::newInstance(), ['course_id' => 'id'])
+			->leftJoin(userDAO::newInstance(), [[],['created_by' => 'id']])
+			->filter([$filters, [], []])
+			->count();
+	
+		$rows = self::newInstance()
+			->leftJoin(courseDAO::newInstance(), ['course_id' => 'id'])
+			->leftJoin(userDAO::newInstance(),  [[],['created_by' => 'id']])
+			->filter([$filters, [], []])
+			->order( [['id' => 'desc']] )
+			->limit($pageSize, $offset)
+			->query('classesCourse.*,course.title,user.nickname teacher');
+	
+		return [
+			'total' => $cnt,
+			'rows' => $rows,
+			'num' => ceil($cnt/$pageSize),
+		];
+	}
 	
 	public static function searchClassesCourse($searchData) {
 		$filters = $searchData;

@@ -62,4 +62,13 @@ class classesDAO extends baseDAO
 		}
 		return $result;
 	}
+	
+	public static function getAllClassesData() {
+		$rows = self::newInstance()->order(['id'=>'desc'])->query('id,title');
+		$result = [];
+		foreach ($rows as $row) {
+			$result[$row['id']] = $row['title'];
+		}
+		return $result;
+	}
 }

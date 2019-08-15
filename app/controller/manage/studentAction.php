@@ -10,6 +10,7 @@ namespace app\controller\manage;
 
 use APP;
 use app\controller\manage\base\baseAction;
+use app\dao\classesDAO;
 use app\dao\studentDAO;
 use app\dao\userDAO;
 use app\model\user;
@@ -34,7 +35,7 @@ class studentAction extends baseAction
 	
 	public function action_create() {
 		$this->setBreadcrumb('添加学生', true);
-		return $this->display('manage/student/form');
+		return $this->display('manage/student/form',['classes'=>classesDAO::getAllClassesData()]);
 	}
 	
 	public function action_edit() {
@@ -50,7 +51,11 @@ class studentAction extends baseAction
 		
 		$renderData = $instance->attributes();
 		
-		return $this->display('manage/student/form',['student'=>$renderData]);
+		$student = App::$model->student($id);
+		$renderData['student_no'] = $student->student_no;
+		$renderData['classes_id'] = $student->classes_id;
+		
+		return $this->display('manage/student/form',['student'=>$renderData, 'classes'=>classesDAO::getAllClassesData()]);
 	}
 	
 	public function action_ajax_edit_post() {
@@ -72,6 +77,12 @@ class studentAction extends baseAction
 				$instance->email = $formData['email'];
 				$instance->updated_at = time();
 				$instance->save();
+				
+				$student = App::$model->student($instance->id);
+				$student->classes_id = $formData['classes_id'];
+				$student->student_no = $formData['student_no'];
+				$student->updated_at = time();
+				$student->save();
 			} else {
 				$numExist = userDAO::newInstance()->filter(['username'=>$formData['username']])->count();
 				if ($numExist > 0) {
@@ -93,7 +104,7 @@ class studentAction extends baseAction
 				if (!$instanceId) {
 					return $this->json(['error'=>'-1','message'=>'操作失败']);
 				}
-				studentDAO::newInstance()->add(['uid'=>$instanceId, 'updated_at'=>time()]);
+				studentDAO::newInstance()->add(['uid'=>$instanceId, 'student_no'=>$formData['student_no'] , 'classes_id' => $formData['classes_id'] ,'updated_at'=>time()]);
 				$redirectUri = $this->routerRoot() . "/student/edit/" . $instanceId;
 			}
 			return $this->json(['error'=>0, 'message'=>'Success!', 'redirectUri'=>$redirectUri]);

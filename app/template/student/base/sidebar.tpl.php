@@ -1,6 +1,11 @@
 <?php
 
 /**@var array $breadcrumbs*/
+/* @var \biny\lib\Response $this */
+/* @var string $webRoot */
+/* @var string $routerRoot */
+/* @var string $tplRoot */
+/* @var string $requestRoot */
 
 ?>
 <script type="text/javascript">
@@ -24,62 +29,30 @@
 </div><!-- /.sidebar-shortcuts -->
 <ul class="nav nav-list">
 	<li class="<?=(isset($sidebar['index'])? 'active open' : '')?>">
-		<a href="<?=$webRoot?>/admin/">
+		<a href="<?=$webRoot?>/index">
 			<i class="menu-icon fa fa-tachometer"></i>
 			<span class="menu-text"> 首页 </span>
 		</a>
 		<b class="arrow"></b>
 	</li>
-    <li class="<?=(isset($sidebar['course'])? 'active open' : '')?>">
+    <li class="active open">
         <a href="javascript:;" class="dropdown-toggle">
             <i class="menu-icon fa fa-gavel"></i>
-            <span class="menu-text">课程管理</span>
+            <span class="menu-text">我的</span>
             <b class="arrow fa fa-angle-down"></b>
         </a>
         <b class="arrow"></b>
         <ul class="submenu">
-            <li class="<?=(isset($sidebar['course-create'])? 'active' : '')?>">
-                <a href="<?=$webRoot?>/admin/course/create">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    添加课程
-                </a>
-            </li>
             <li class="<?=(isset($sidebar['course-index'])? 'active' : '')?>">
-                <a href="<?=$webRoot?>/admin/course">
+                <a href="<?=$webRoot?>/course">
                     <i class="menu-icon fa fa-caret-right"></i>
-                    课程列表
+                    我的课程
                 </a>
             </li>
-        </ul>
-    </li>
-    <li class="<?=(isset($sidebar['user'])? 'active open' : '')?>">
-        <a href="javascript:;" class="dropdown-toggle">
-            <i class="menu-icon fa fa-users"></i>
-            <span class="menu-text">用户管理</span>
-            <b class="arrow fa fa-angle-down"></b>
-        </a>
-        <b class="arrow"></b>
-        <ul class="submenu">
-            <li class="<?=(isset($sidebar['user-index'])? 'active' : '')?>">
-                <a href="<?=$webRoot?>/admin/user">
+            <li class="<?=(isset($sidebar['exam-index'])? 'active' : '')?>">
+                <a href="<?=$webRoot?>/exam">
                     <i class="menu-icon fa fa-caret-right"></i>
-                    用户列表
-                </a>
-            </li>
-        </ul>
-    </li>
-    <li class="<?=(isset($sidebar['chart'])? 'active open' : '')?>">
-        <a href="javascript:;" class="dropdown-toggle">
-            <i class="menu-icon fa fa-line-chart"></i>
-            <span class="menu-text">数据统计</span>
-            <b class="arrow fa fa-angle-down"></b>
-        </a>
-        <b class="arrow"></b>
-        <ul class="submenu">
-            <li class="<?=(isset($sidebar['chart-index'])? 'active' : '')?>">
-                <a href="#">
-                    <i class="menu-icon fa fa-caret-right"></i>
-                    用户统计
+                    我的考试
                 </a>
             </li>
         </ul>

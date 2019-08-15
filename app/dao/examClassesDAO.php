@@ -8,6 +8,38 @@ class examClassesDAO extends baseDAO
     protected $_pk = 'id';
     protected $_pkCache = true;
     
+    public static function searchStudentExam($searchData) {
+		$filters = $searchData;
+	
+		$page = $filters['page'];
+		$pageSize = $filters['pageSize'];
+	
+		unset($filters['page']);
+		unset($filters['pageSize']);
+	
+		$offset = max(0, ($page-1)*$pageSize);
+	
+		$cnt = self::newInstance()
+			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
+			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
+			->filter([$filters, [], []])
+			->count();
+	
+		$rows = self::newInstance()
+			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
+			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
+			->filter([$filters, [], []])
+			->order( [['id' => 'desc']] )
+			->limit($pageSize, $offset)
+			->query('exam.*,course.title course_title');
+	
+		return [
+			'total' => $cnt,
+			'rows' => $rows,
+			'num' => ceil($cnt/$pageSize),
+		];
+	}
+    
     public static function getExistClassesData($examId) {
     	$rows = self::newInstance()
 			->leftJoin(classesDAO::newInstance(), ['classes_id'=>'id'])
