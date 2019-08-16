@@ -181,6 +181,8 @@ CREATE TABLE `exam_result` (
   `start_at` INT(11) NOT NULL DEFAULT '0',
   `end_at` INT(11) NOT NULL DEFAULT '0',
   `status` SMALLINT NOT NULL DEFAULT '0' COMMENT '0未交卷 1交卷未打分 2交卷已打分',
+  `created_at` INT(11) NOT NULL DEFAULT '0',
+  `expired_at` INT(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   INDEX `idx-uid` (`uid`),
   INDEX `idx-exam` (`exam_id`)

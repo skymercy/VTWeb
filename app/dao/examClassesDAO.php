@@ -25,19 +25,25 @@ class examClassesDAO extends baseDAO
 		$cnt = self::newInstance()
 			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
 			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
-			->leftJoin(examResultDAO::newInstance(),[['exam_id'=>'exam_id']])
-			->filter([$filters, [], [], ['uid'=>$uid]])
+			->filter([$filters, [], []])
 			->count();
 	
 		$rows = self::newInstance()
 			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
 			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
-			->leftJoin(examResultDAO::newInstance(),[['exam_id'=>'exam_id']])
-			->filter([$filters, [], [], ['uid'=>$uid]])
+			->filter([$filters, [], []])
 			->order( [['id' => 'desc']] )
 			->limit($pageSize, $offset)
-			->query('exam.*,course.title course_title,examResult.id result_id,examResult.score,examResult.status');
-	
+			->query('exam.*,course.title course_title');
+		
+		foreach ($rows as &$row) {
+			$examResult = examResultDAO::newInstance()->filter(['uid'=>$uid, 'exam_id'=>$row['id']])->find();
+			if (!empty($examResult)) {
+				$row['result_id'] = $examResult['id'];
+				$row['score'] = $examResult['score'];
+				$row['status'] = $examResult['status'];
+			}
+		}
 		return [
 			'total' => $cnt,
 			'rows' => $rows,

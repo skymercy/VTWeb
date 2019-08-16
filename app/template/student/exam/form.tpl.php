@@ -1,10 +1,15 @@
 <?php include App::$view_root . "/base/header.begin.tpl.php" ?>
 <?php include App::$view_root . "/base/header.end.tpl.php" ?>
 <form id="exam-form">
+	<input type="hidden" name="_csrf" value="<?=$this->getCsrfToken()?>"/>
+	<input type="hidden" name="ExamResult[id]" value="<?=$PRM['result']['id']?>">
 	<div class="page-content">
 		<div class="row">
 			<div class="col-xs-12">
-				<?php $cnt = 1;?>
+				<?php
+				$cnt = 1;
+				$existResultContent = $PRM['result']['content'];
+				?>
 				<?php foreach ($PRM['exam'] as $k=>$questions): ?>
 					<?php foreach ($questions as $question):?>
 						<div class="col-xs-12 col-sm-12 widget-container-col" id="question-<?=$cnt?>">
@@ -19,7 +24,9 @@
 											<?php foreach ($question['items'] as $item):?>
 												<div class="radio">
 													<label>
-														<input name="Exam[<?=$question['id']?>]" type="radio" class="ace input-lg" />
+														<input name="ExamContent[<?=$question['id']?>]" type="radio" class="ace input-lg" value="<?=$item['id']?>"
+															<?php if (isset($existResultContent[$question['id']]) && $existResultContent[$question['id']] == $item['id']) {echo "checked='checked'";} ?>
+														/>
 														<span class="lbl bigger-120"><?=$item['title']?></span>
 														<?=$item['content']?>
 													</label>
@@ -29,14 +36,16 @@
 											<?php foreach ($question['items'] as $item):?>
 												<div class="checkbox">
 													<label class="block">
-														<input name="Exam[<?=$question['id']?>][]" type="checkbox" class="ace input-lg" />
+														<input name="ExamContent[<?=$question['id']?>][]" type="checkbox" class="ace input-lg" value="<?=$item['id']?>"
+															<?php if (isset($existResultContent[$question['id']]) && in_array($item['id'], $existResultContent[$question['id']]->values(false)) ) {echo "checked='checked'";} ?>
+														/>
 														<span class="lbl bigger-120"><?=$item['title']?></span>
 														<?=$item['content']?>
 													</label>
 												</div>
 											<?php endforeach;?>
 										<?php elseif ($k == \app\model\question::Type_Select_Text):?>
-											<textarea rows="10" cols="100" name="Exam[<?=$question['id']?>]"></textarea>
+											<textarea rows="10" cols="100" name="ExamContent[<?=$question['id']?>]"><?=(isset($existResultContent[$question['id']])) ? $existResultContent[$question['id']] : '' ?></textarea>
 										<?php endif;?>
 									</div>
 								</div>
@@ -50,11 +59,11 @@
 	</div>
 	<div class="clearfix form-actions" style="position: fixed; display: block; height: 80px; bottom: -20px;width: 100%;">
 		<div class="col-md-offset-2 col-md-9">
-			<button class="btn btn-info" type="button">
+			<button class="btn btn-info j-btn-save" type="button">
 				<i class="ace-icon fa fa-check bigger-110"></i>
 				保存当前数据
 			</button>
-			<button class="btn btn-info" type="button">
+			<button class="btn btn-info j-btn-submit" type="button">
 				<i class="ace-icon fa fa-check bigger-110"></i>
 				提交考卷
 			</button>
@@ -65,7 +74,14 @@
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
 	$(function () {
-
+		$('.j-btn-save').on('click', function () {
+			postRequest('/exam/ajax_save', new FormData($('#exam-form')[0]), function(resp){
+				console.log(resp);
+			});
+		});
+		$('.j-btn-submit').on('click', function () {
+			postRequest('/exam/ajax_submit', new FormData($('#exam-form')[0]));
+		});
 	});
 </script>
 <?php include App::$view_root . "/base/footer.end.tpl.php" ?>

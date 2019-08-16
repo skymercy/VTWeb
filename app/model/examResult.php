@@ -17,6 +17,7 @@ namespace app\model;
  * @property int $start_at
  * @property int $end_at
  * @property int $content
+ * @property int $expired_at
  *
  * @package app\model
  */

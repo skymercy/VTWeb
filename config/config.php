@@ -55,7 +55,7 @@ return array(
         'paramsType' => 'one',  // one or keys
         // 以下配置在paramsType == one 时有效
         'paramsKey' => 'PRM',
-        'objectEncode' => true, //object对象是否转义
+        'objectEncode' => false, //object对象是否转义
     ),
 
     //日志相关配置
