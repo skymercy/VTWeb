@@ -3,7 +3,7 @@
 
 <div class="page-content">
 	<div class="row" style="margin-bottom: 10px;">
-		<a href="/manage/course/create" class="btn btn-xs btn-warning">
+		<a href="<?=$routerRoot?>/course/create" class="btn btn-xs btn-warning">
 			<i class="ace-icon fa fa-plus bigger-110"></i>
 			添加实验课程
 		</a>
@@ -28,13 +28,13 @@
 							<td class="j-item-created"><span><?=date('Y/m/d H:i:s', $item['created_at'])?></span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
-									<a href="/manage/course/edit/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑信息">
+									<a href="<?=$routerRoot?>/course/edit/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑信息">
 										<i class="ace-icon fa fa-edit bigger-120"></i>编辑信息
 									</a>
-									<a href="/manage/course/questions/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑题库">
+									<a href="<?=$routerRoot?>/course/questions/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑题库">
 										<i class="ace-icon fa fa-book bigger-120"></i>编辑题库
 									</a>
-									<a href="/manage/course/classes/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑班级">
+									<a href="<?=$routerRoot?>/course/classes/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑班级">
 										<i class="ace-icon fa fa-book bigger-120"></i>编辑班级
 									</a>
 								</div>

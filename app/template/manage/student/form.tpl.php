@@ -129,7 +129,7 @@
 				<?php endif;?>
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/student/ajax_edit_post', new FormData($('#student-form')[0]));
+				postRequest('<?=$routerRoot?>/student/ajax_edit_post', new FormData($('#student-form')[0]));
 			}
 		});
 	});

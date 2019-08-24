@@ -1,6 +1,7 @@
 <?php
 namespace app\controller\base;
 
+use app\model\user;
 use biny\lib\Action;
 use biny\lib\Response;
 use App;
@@ -31,10 +32,17 @@ class baseAction extends Action
 	protected static $_requestRoot = null;
 	protected static $_routerRoot = null;
 	
+	protected $limitRole = user::Role_Student;
+	
 	protected $breadcrumbs = [];
 	protected $searchData = [];
 	
 	public function init() {
+		
+		if ($this->reqModule != 'login') {
+			$this->checkUserRole($this->limitRole);
+		}
+		
 		$this->searchData = $this->param('SearchData');
 		if (empty($this->searchData)) {
 			$this->searchData = [];
@@ -174,6 +182,33 @@ class baseAction extends Action
     	$str = "<p>HostInfo:" . self::request()->getHostInfo() . "</p>";
     	$str .= "<p>URL:" . self::request()->getUrl() . "</p>";
     	exit($str);
+	}
+	
+	public function checkUserRole($role) {
+		if (!APP::$model->user->exist()){
+			if (self::request()->isAjax() || self::request()->isPost()) {
+				exit('非法访问');
+			} else {
+				self::redirectToLoginPage();
+			}
+		}
+		if (App::$model->user->role != $role) {
+			if (self::request()->isAjax() || self::request()->isPost()) {
+				exit('非法访问');
+			} else {
+				var_dump(App::$model->user->role);
+				var_dump($role);exit;
+				if (App::$model->user->role == user::Role_Student) {
+					self::redirectToStudentIndexPage();
+				} else if (App::$model->user->role == user::Role_Teacher) {
+					self::redirectToTeacherIndexPage();
+				} else if (App::$model->user->role == user::Role_Administrator) {
+					self::redirectToManageIndexPage();
+				}else {
+					exit('非法访问');
+				}
+			}
+		}
 	}
 	
 }

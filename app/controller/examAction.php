@@ -10,33 +10,14 @@ namespace app\controller;
 
 use APP;
 use app\controller\base\baseAction;
-use app\dao\classesCourseDAO;
 use app\dao\examClassesDAO;
 use app\dao\examDAO;
 use app\dao\examResultDAO;
-use app\model\exam;
 use app\model\examResult;
-use app\model\user;
 
 class examAction extends baseAction
 {
 	public function init() {
-		$user = App::$model->user;
-		if (!$user->exist()) {
-			self::redirectToLoginPage();
-		}
-		switch ($user->role) {
-			case user::Role_Student:
-				break;
-			case user::Role_Teacher:
-				self::redirectToTeacherIndexPage();
-				break;
-			case user::Role_Administrator:
-				self::redirectToManageIndexPage();
-				break;
-			default:
-				exit("非法请求");
-		}
 		parent::init();
 	}
 	

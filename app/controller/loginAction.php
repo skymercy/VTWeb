@@ -14,6 +14,10 @@ use app\model\user;
 
 class loginAction extends baseAction
 {
+	public function init()
+	{
+	}
+	
 	/**
 	 * 登录
 	 */

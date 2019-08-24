@@ -9,11 +9,14 @@
 namespace app\controller\manage;
 
 use APP;
-use app\controller\manage\base\baseAction;
+use app\controller\base\baseAction;
 use app\dao\examClassesDAO;
+use app\model\user;
 
 class examAction extends baseAction
 {
+	protected $limitRole = user::Role_Administrator;
+	
 	public function init() {
 		parent::init();
 	}

@@ -11,27 +11,10 @@ namespace app\controller;
 use APP;
 use app\controller\base\baseAction;
 use app\dao\classesCourseDAO;
-use app\model\user;
 
 class courseAction extends baseAction
 {
 	public function init() {
-		$user = App::$model->user;
-		if (!$user->exist()) {
-			self::redirectToLoginPage();
-		}
-		switch ($user->role) {
-			case user::Role_Student:
-				break;
-			case user::Role_Teacher:
-				self::redirectToTeacherIndexPage();
-				break;
-			case user::Role_Administrator:
-				self::redirectToManageIndexPage();
-				break;
-			default:
-				exit("非法请求");
-		}
 		parent::init();
 		$this->setBreadcrumb('我的');
 	}

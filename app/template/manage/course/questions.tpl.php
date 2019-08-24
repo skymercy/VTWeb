@@ -405,7 +405,7 @@
 				var formData = new FormData($('#question-form')[0]);
 				formData.delete("editorValue");
 				formData.append("Question[content]", questionEditor.getContent());
-				postRequest('/manage/question/ajax_edit_post', formData);
+				postRequest('<?=$routerRoot?>/question/ajax_edit_post', formData);
 			}
 		});
 		
@@ -416,7 +416,7 @@
 			ignore: "",
 			submitHandler: function (form) {
 				var formData = new FormData($('#exam-form')[0]);
-				postRequest('/manage/course/ajax_publish', formData);
+				postRequest('<?=$routerRoot?>/course/ajax_publish', formData);
 			}
 		})
 
@@ -435,7 +435,7 @@
 				formData.delete("editorValue");
 				formData.append("QuestionItem[content]", itemEditor.getContent());
 				var questionId = $('#questionItem-form').find("input[name='QuestionItem[question_id]']").val();
-				postRequest('/manage/questionItem/ajax_edit_post', formData, function(resp){
+				postRequest('<?=$routerRoot?>/questionItem/ajax_edit_post', formData, function(resp){
 					renderQuestionItems(questionId, resp.items);
 					$('#questionItemModal').modal('hide');
 				});
@@ -456,7 +456,7 @@
 		});
 		
 		$('.btn-publish').on('click', function(){
-			postRequest('/manage/course/ajax_check_publish?id='+courseId,{},function (data) {
+			postRequest('<?=$routerRoot?>/course/ajax_check_publish?id='+courseId,{},function (data) {
 				$("#exam-form")[0].reset();
 				$(".j-publish-errors").empty();
 				$(".j-publish-errors").append('<p>总分:'+data.data.total_score+'</p>');
@@ -499,7 +499,7 @@
 		
 		$('#questionItems_TBody').on('click','.btn-edit-questionItem', function(e) {
 			var itemId = $(this).attr('data-id');
-			postRequest('/manage/questionItem/ajax_info?id='+itemId, {}, function(data){
+			postRequest('<?=$routerRoot?>/questionItem/ajax_info?id='+itemId, {}, function(data){
 				$("#questionItem-form")[0].reset();
 				$("#questionItem-form").find('input[name="QuestionItem[id]"]').val(data.data.id);
 				$("#questionItem-form").find('input[name="QuestionItem[question_id]"]').val(data.data.question_id);
@@ -518,7 +518,7 @@
 		
 		$('.btn-edit-question').on('click', function (e) {
 			var qid = $(this).attr('data-id');
-			postRequest('/manage/question/ajax_info?id='+qid,{},function (data) {
+			postRequest('<?=$routerRoot?>/question/ajax_info?id='+qid,{},function (data) {
 				$("#question-form")[0].reset();
 				$("#question-form").find('input[name="Question[id]"]').val(data.data.id);
 				$("#question-form").find('input[name="Question[sort]"]').val(data.data.sort);
@@ -538,7 +538,7 @@
 		
 		$('.btn-edit-question-items').on('click', function (e) {
 			var qid = $(this).attr('data-id');
-			postRequest('/manage/question/ajax_items?id='+qid,{},function (data) {
+			postRequest('<?=$routerRoot?>/question/ajax_items?id='+qid,{},function (data) {
 				$('#viewQuestionItemsModal-title').text(data.data.title);
 				$('.btn-create-question-item').attr('data-id',data.data.id);
 				//渲染

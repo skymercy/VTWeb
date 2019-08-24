@@ -105,7 +105,7 @@
 				<?php endif;?>
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/teacher/ajax_edit_post', new FormData($('#teacher-form')[0]));
+				postRequest('<?=$routerRoot?>/teacher/ajax_edit_post', new FormData($('#teacher-form')[0]));
 			}
 		});
 	});

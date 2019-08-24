@@ -26,7 +26,7 @@
 							<td class="j-item-created"><span><?=date('Y/m/d H:i:s', $item['created_at'])?></span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
-									<a href="/manage/classes/edit/<?=$item['id']?>" class="btn btn-xs btn-info">
+									<a href="<?=$routerRoot?>/classes/edit/<?=$item['id']?>" class="btn btn-xs btn-info">
 										<i class="ace-icon fa fa-edit bigger-120"></i>
 									</a>
 								</div>

@@ -71,7 +71,7 @@
 				},
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/classes/ajax_edit_post', new FormData($('#classes-form')[0]));
+				postRequest('<?=$routerRoot?>/classes/ajax_edit_post', new FormData($('#classes-form')[0]));
 			}
 		});
 	});

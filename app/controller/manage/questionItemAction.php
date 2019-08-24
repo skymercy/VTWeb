@@ -9,18 +9,16 @@
 namespace app\controller\manage;
 
 use APP;
-use app\controller\manage\base\baseAction;
-use app\dao\courseDAO;
-use app\dao\collegeDAO;
-use app\dao\questionDAO;
+use app\controller\base\baseAction;
 use app\dao\questionItemDAO;
-use app\dao\teacherDAO;
-use app\dao\userDAO;
 use app\model\question;
 use app\model\user;
 
 class questionItemAction extends baseAction
 {
+	
+	protected $limitRole = user::Role_Administrator;
+	
 	public function init() {
 		parent::init();
 	}

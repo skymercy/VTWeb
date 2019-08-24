@@ -71,7 +71,7 @@
 				}
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/college/ajax_edit_post', new FormData($('#college-form')[0]));
+				postRequest('<?=$routerRoot?>/college/ajax_edit_post', new FormData($('#college-form')[0]));
 			}
 		});
 		refreshChosen();

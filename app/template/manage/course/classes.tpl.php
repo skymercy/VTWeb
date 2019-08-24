@@ -124,7 +124,7 @@
 				}
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/course/ajax_bind_classes', new FormData($('#classesCourse-form')[0]));
+				postRequest('<?=$routerRoot?>/course/ajax_bind_classes', new FormData($('#classesCourse-form')[0]));
 			}
 		});
 

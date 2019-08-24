@@ -9,13 +9,14 @@
 namespace app\controller\manage;
 
 use APP;
-use app\controller\manage\base\baseAction;
+use app\controller\base\baseAction;
 use app\dao\collegeDAO;
-use app\dao\userDAO;
 use app\model\user;
 
 class collegeAction extends baseAction
 {
+	protected $limitRole = user::Role_Administrator;
+	
 	public function init() {
 		parent::init();
 		$this->setBreadcrumb('院系管理');

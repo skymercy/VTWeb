@@ -167,13 +167,13 @@
 			ignore: "",
 			submitHandler: function (form) {
 				var formData = new FormData($('#exam-form')[0]);
-				postRequest('/manage/exam/ajax_edit_post', formData);
+				postRequest('<?=$routerRoot?>/exam/ajax_edit_post', formData);
 			}
 		})
 		
 		$('.btn-edit-exam').on('click', function(){
 			var examId = $(this).attr('data-id');
-			postRequest('/manage/exam/ajax_info?id='+examId,{},function(data){
+			postRequest('<?=$routerRoot?>/exam/ajax_info?id='+examId,{},function(data){
 				$("#exam-form")[0].reset();
 				$("#exam-form").find('input[name="Exam[id]"]').val(data.data.id);
 				$("#exam-form").find('input[name="Exam[course_id]"]').val(data.data.course_id);

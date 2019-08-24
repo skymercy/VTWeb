@@ -56,7 +56,7 @@
 				},
 			},
 			submitHandler: function (form) {
-				postRequest('/manage/course/ajax_edit_post', new FormData($('#course-form')[0]));
+				postRequest('<?=$routerRoot?>/course/ajax_edit_post', new FormData($('#course-form')[0]));
 			}
 		});
 

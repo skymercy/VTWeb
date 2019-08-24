@@ -9,7 +9,7 @@
 namespace app\controller\manage;
 
 use APP;
-use app\controller\manage\base\baseAction;
+use app\controller\base\baseAction;
 use app\dao\classesDAO;
 use app\dao\studentDAO;
 use app\dao\userDAO;
@@ -17,6 +17,8 @@ use app\model\user;
 
 class studentAction extends baseAction
 {
+	protected $limitRole = user::Role_Administrator;
+	
 	public function init() {
 		parent::init();
 		$this->setBreadcrumb('学生管理');
