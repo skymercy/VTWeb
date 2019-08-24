@@ -23,7 +23,7 @@ class examAction extends baseAction
 	
 	public function action_index() {
 		$this->setBreadcrumb('我的');
-		$this->setBreadcrumb('课程列表', true);
+		$this->setBreadcrumb('考试', true);
 		
 		$student = App::$model->student(App::$model->user->id);
 		$this->searchData['classes_id'] = $student->classes_id;
