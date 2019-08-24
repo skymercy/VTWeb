@@ -196,8 +196,6 @@ class baseAction extends Action
 			if (self::request()->isAjax() || self::request()->isPost()) {
 				exit('非法访问');
 			} else {
-				var_dump(App::$model->user->role);
-				var_dump($role);exit;
 				if (App::$model->user->role == user::Role_Student) {
 					self::redirectToStudentIndexPage();
 				} else if (App::$model->user->role == user::Role_Teacher) {
