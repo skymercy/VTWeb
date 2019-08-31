@@ -38,5 +38,6 @@ class loginAction extends baseAction
 			
 			return $this->successJson($result);
 		}
+		return $this->errorJson('仅POST请求');
 	}
 }
