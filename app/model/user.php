@@ -20,6 +20,11 @@ use App;
  * @property string $email
  * @property int $role
  *
+ * @property int $ping_at
+ * @property int $ts_online
+ * @property string $access_token
+ * @property int $access_token_expired_at
+ *
  * @package app\model
  */
 class user extends baseModel
@@ -55,6 +60,25 @@ class user extends baseModel
 	{
 		$this->DAO->updateByPk($this->_pk, ['login_at'=>time(), 'num_login'=>['+'=>1]]);
 		App::$base->session->uid = $this->_pk;
+	}
+	
+	/**
+	 *  API登录
+	 * @return array
+	 */
+	public function apiLogin()
+	{
+		$accessToken = \YiiSecurity::generateRandomString();
+		$accessTokenExpiredAt = time()+24*3600;
+		$this->DAO->updateByPk($this->_pk, ['login_at'=>time(), 'num_login'=>['+'=>1],'access_token'=>$accessToken,'access_token_expired_at'=>$accessTokenExpiredAt,'ping_at'=>time()]);
+		App::$base->session->uid = $this->_pk;
+		return [
+			"uid" => $this->id,
+			'username' => $this->username,
+			'nickname' => $this->nickname,
+			'access_token' => $accessToken,
+			'online' => $this->ts_online,
+		];
 	}
 	
 	/**

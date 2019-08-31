@@ -190,12 +190,16 @@ class Action
      */
     public function param($key, $default=null)
     {
+    	if ($key == null) {
+    		return $this->params;
+		}
         if (App::$base->request->getContentType() == 'application/json' || App::$base->request->getContentType() == 'text/json'){
             return $this->getJson($key, $default);
         } else {
             return isset($this->params[$key]) ? $this->params[$key] : $default;
         }
     }
+    
 
     /**
      * 获取POST参数
