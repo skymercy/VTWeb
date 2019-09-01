@@ -35,6 +35,9 @@ class baseAction extends \app\controller\base\baseAction
 	}
 	
 	protected function getUserByAccessToken() {
+		if (empty($this->accessToken)) {
+			return false;
+		}
 		$user = App::$model->user(['access_token'=>$this->accessToken]);
 		if ($user->exist()) {
 			return $user;
