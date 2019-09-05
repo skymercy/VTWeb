@@ -1,5 +1,12 @@
 # VTWeb
 
+#### 环境配置
+
+1. PHP >= 5.5
+2. Nginx >= 1.12.0 
+3. MySQL >= 5.6
+4. Redis >= 4.0
+
 #### 注意点
 1. 使用biny框架  http://www.billge.cc/
 
