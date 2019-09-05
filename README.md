@@ -69,7 +69,7 @@ defined('SYS_ENV') or define('SYS_ENV', 'pre');
 #### 部署
 
 1. 创建数据库,  并执行 使用 /database 目录下的sql文件，初始化数据库结构
-2. 配置入口文件中的, SYS_ENV 的模式, 并配置数据库，redis等服务信息
+2. 配置入口文件中的, SYS_ENV 的模式, 并再对应的/app/config/dns_*.php中，配置数据库，redis等服务信息
 3. 执行创建管理员脚本,默认用户名密码为super
 ```
 php shell.php init/admin
