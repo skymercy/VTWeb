@@ -25,6 +25,7 @@ return array(
 			'teacher/course/classes/<id:\d+>' => 'teacher/course/classes',
 			'teacher/question/info/<id:\d+>' => 'teacher/question/info',
 			'exam/edit/<id:\d+>' => 'exam/edit',
+			'exam/access/<id:[\w\W]+>' => 'exam/access',
         ),
     ),
 

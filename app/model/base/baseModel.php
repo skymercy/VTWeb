@@ -31,6 +31,7 @@ use biny\lib\BinyString;
  * @property \app\dao\questionDAO $questionDAO
  * @property \app\dao\questionItemDAO $questionItemDAO
  * @property \app\dao\examDAO $examDAO
+ * @property \app\dao\examAccessDAO $examAccessDAO
  * @property \app\dao\examClassesDAO $examClassesDAO
  * @property \app\dao\examQuestionDAO $examQuestionDAO
  * @property \app\dao\examResultDAO $examResultDAO

@@ -11,16 +11,20 @@ namespace app\model;
 /**
  * Class classes
  *
- * @property string $title
- * @property string $unique_no
+ * @property string $token
+ * @property int $course_id
+ * @property int $exam_id
+ * @property int $uid
+ * @property int $status
+ * @property int $expired_at
  *
  * @package app\model
  */
-class course extends baseModel
+class examAccess extends baseModel
 {
 	protected function __construct($id)
 	{
-		$this->DAO = $this->courseDAO;
+		$this->DAO = $this->examAccessDAO;
 		parent::__construct($id);
 	}
 }

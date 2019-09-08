@@ -19,6 +19,12 @@
 							</div>
 						<?php endif;?>
 						<div class="form-group">
+							<label class="col-sm-3 control-label no-padding-left" for="form-field-title"> 课程编号 </label>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" name="Course[unique_no]" value="<?=$PRM['course']['unique_no']?>">
+							</div>
+						</div>
+						<div class="form-group">
 							<label class="col-sm-3 control-label no-padding-left" for="form-field-title"> 实验课程名 </label>
 							<div class="col-sm-7">
 								<input type="text" class="form-control" name="Course[title]" value="<?=$PRM['course']['title']?>">
@@ -52,6 +58,9 @@
 			ignore: "",
 			rules: {
 				'Course[title]': {
+					required: true
+				},
+				'Course[unique_no]': {
 					required: true
 				},
 			},

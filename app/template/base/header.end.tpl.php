@@ -48,7 +48,7 @@
     </script>
     <div id="sidebar" class="sidebar responsive ace-save-state">
 		<?php
-			if ($tplRoot == '/student' && isset($sidebar['exam-edit'])) {
+			if ($tplRoot == '/student' && (isset($sidebar['exam-edit']) || isset($sidebar['exam-access']))) {
 				include App::$view_root . $tplRoot . "/base/exam-nav.tpl.php";
 			} else {
 				include App::$view_root . $tplRoot . "/base/sidebar.tpl.php";

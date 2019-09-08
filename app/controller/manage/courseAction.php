@@ -131,20 +131,30 @@ class courseAction extends baseAction
 				if (!$instance->exist()) {
 					return $this->json(['error'=>'-1','message'=>'出错了，数据不存在或已删除']);
 				}
+				$numExist = courseDAO::newInstance()->filter(['!='=>['id'=>$formData['id']], 'unique_no'=>$formData['unique_no']])->count();
+				if ($numExist > 0) {
+					return $this->json(['error'=>'-1','message'=>'编号重复']);
+				}
 				$numExist = courseDAO::newInstance()->filter(['!='=>['id'=>$formData['id']], 'title'=>$formData['title']])->count();
 				if ($numExist > 0) {
 					return $this->json(['error'=>'-1','message'=>'实验课程名重复']);
 				}
+				$instance->unique_no = $formData['unique_no'];
 				$instance->title = $formData['title'];
 				$instance->updated_at = time();
 				$instance->save();
 			} else {
+				$numExist = courseDAO::newInstance()->filter(['unique_no'=>$formData['unique_no']])->count();
+				if ($numExist > 0) {
+					return $this->json(['error'=>'-1','message'=>'编号重复']);
+				}
 				$numExist = courseDAO::newInstance()->filter(['title'=>$formData['title']])->count();
 				if ($numExist > 0) {
 					return $this->json(['error'=>'-1','message'=>'实验课程名重复']);
 				}
 				$data = [
 					'title' => $formData['title'],
+					'unique_no' => $formData['unique_no'],
 					'created_by' => App::$model->user->id,
 					'created_at' => time(),
 					'updated_at' => time(),

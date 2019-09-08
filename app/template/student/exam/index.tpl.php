@@ -25,7 +25,7 @@
 						<tr>
 							<td><span><?=$item['id']?></span></td>
 							<td><span><?=$item['title']?></span></td>
-							<td><span><?=$item['course_title']?></span></td>
+							<td><b>【<?=$item['course_no']?>】</b><span><?=$item['course_title']?></span></td>
 							<td><span><?=sprintf("%0.2f",$item['total']/100 )?>分</span></td>
 							<td><span><?=date('Y/m/d H:i',$item['start_at'])?> - <?=date('Y/m/d H:i',$item['end_at'])?></span></td>
 							<td><span><?=sprintf("%0.2f",$item['duration']/3600 )?>小时</span></td>

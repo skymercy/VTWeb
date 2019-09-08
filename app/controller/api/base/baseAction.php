@@ -34,6 +34,9 @@ class baseAction extends \app\controller\base\baseAction
 		return $this->json(['error'=>0, 'message'=>'OK', 'data'=>$data]);
 	}
 	
+	/**
+	 * @return App\model\user|bool
+	 */
 	protected function getUserByAccessToken() {
 		if (empty($this->accessToken)) {
 			return false;

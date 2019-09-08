@@ -2,8 +2,7 @@
 
 namespace app\dao;
 
-use app\model\examQuestion;
-use app\model\question;
+use App;
 
 class examDAO extends baseDAO
 {
@@ -99,5 +98,27 @@ class examDAO extends baseDAO
 			$result[$type][$question['id']] = $question;
 		}
 		return $result;
+	}
+	
+	public static function getCurrentExam($uid, $courseId) {
+		
+		$student = App::$model->student($uid);
+		
+		$filters = [
+			'page' => 1,
+			'pageSize' => 20,
+			'classes_id' => $student->classes_id,
+			'uid' => $uid,
+			'course_id' => $courseId,
+			'current' => 1,
+		];
+		
+		$result = examClassesDAO::searchStudentExam($filters);
+		
+		if ($result['total'] == 0) {
+			return false;
+		}
+		
+		return $result['rows'][0];
 	}
 }

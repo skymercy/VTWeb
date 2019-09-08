@@ -1,0 +1,101 @@
+### 登录
+[POST] vt.skyoho.com/api/login
+参数:
+username, string类型 用户名
+password, string类型 密码
+返回:
+{
+    "error": 0,
+    "message": "OK",
+    "data": {
+        "uid": 12,
+        "username": "student01",
+        "nickname": "学生1",
+        "access_token": "zo-zU_vo2YNoo-eZ9YZN2kO8WUz_XgFQ",
+        "online": 117
+    }
+}
+解释:
+online: 用户在线的总秒数
+
+
+### ping/心跳
+[GET/POST] vt.skyoho.com/api/ping
+参数:
+access_token, string类型
+错误返回:
+{
+    "error": -1,
+    "message": "登录状态已过期"
+}
+正常返回:
+{
+    "error": 0,
+    "message": "OK",
+    "data": {
+        "online": 148
+    }
+}
+注:
+心跳间隔大于一定时间，则无效，这个值暂取120秒。测试时保持120秒以内的心跳间隔
+
+
+### 取用户信息
+[GET/POST] vt.skyoho.com/api/user
+参数:
+access_token, string类型
+错误返回:
+{
+    "error": -1,
+    "message": "登录状态已过期"
+}
+正常返回:
+{
+    "error": 0,
+    "message": "OK",
+    "data": {
+        "uid": 12,
+        "username": "student01",
+        "nickname": "学生1",
+        "online": 117
+    }
+}
+
+
+### 取考试地址
+[GET/POST] vt.skyoho.com/api/exam/uri
+参数:
+access_token, string类型
+course_no, 课程编号, string类型
+错误返回:
+{
+    "error": -1,
+    "message": "登录状态已过期"
+}
+正常返回:
+{
+    "error": 0,
+    "message": "OK",
+    "data": {
+        "uri": "vt.skyoho.com"
+    }
+}
+
+
+### 提交实验操作分数
+[POST] vt.skyoho.com/api/experiment/submit
+参数:
+access_token, string类型
+course_no, 课程编号, string类型
+score, int类型
+错误返回:
+{
+    "error": -1,
+    "message": "登录状态已过期"
+}
+正常返回:
+{
+    "error": 0,
+    "message": "OK",
+    "data": []
+}

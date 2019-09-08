@@ -39,7 +39,11 @@ class baseAction extends Action
 	
 	public function init() {
 		
-		if ($this->reqModule != 'login') {
+		if ($this->reqModule == 'login') {
+		
+		} else  if ($this->reqModule == 'exam' && $this->reqMethod == 'access') {
+		
+		} else {
 			$this->checkUserRole($this->limitRole);
 		}
 		

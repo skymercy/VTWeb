@@ -15,6 +15,7 @@
 					<thead>
 					<tr>
 						<th>ID</th>
+						<th>编号</th>
 						<th>实验课程</th>
 						<th>创建时间</th>
 						<th></th>
@@ -22,10 +23,11 @@
 					</thead>
 					<tbody>
 					<?php foreach ($PRM['items'] as $item): ?>
-						<tr class="j-tag-item-<?=$item['id']?>">
-							<td class="j-item-id"><span><?=$item['id']?></span></td>
-							<td class="j-item-title"><span><?=$item['title']?></span></td>
-							<td class="j-item-created"><span><?=date('Y/m/d H:i:s', $item['created_at'])?></span></td>
+						<tr>
+							<td><span><?=$item['id']?></span></td>
+							<td><span><?=$item['unique_no']?></span></td>
+							<td><span><?=$item['title']?></span></td>
+							<td><span><?=date('Y/m/d H:i:s', $item['created_at'])?></span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
 									<a href="<?=$routerRoot?>/course/edit/<?=$item['id']?>" class="btn btn-xs btn-info" title="编辑信息">

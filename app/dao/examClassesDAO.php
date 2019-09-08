@@ -21,20 +21,31 @@ class examClassesDAO extends baseDAO
 		
 		$uid = $filters['uid'];
 		unset($filters['uid']);
+		
+		$examFilters = [];
+		if (isset($filters['current'])) {
+			$examFilters['>='] = ['end_at' => time()];
+			$examFilters['<='] = ['start_at' => time()];
+			unset($filters['current']);
+		}
+		if (isset($filters['course_id'])) {
+			$examFilters['course_id'] = $filters['course_id'];
+			unset($filters['course_id']);
+		}
 	
 		$cnt = self::newInstance()
 			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
 			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
-			->filter([$filters, [], []])
+			->filter([$filters, $examFilters, []])
 			->count();
 	
 		$rows = self::newInstance()
 			->leftJoin(examDAO::newInstance(),['exam_id' => 'id'])
 			->leftJoin(courseDAO::newInstance(), [[],['course_id' => 'id']])
-			->filter([$filters, [], []])
+			->filter([$filters, $examFilters, []])
 			->order( [['id' => 'desc']] )
 			->limit($pageSize, $offset)
-			->query('exam.*,course.title course_title');
+			->query('exam.*,course.title course_title,course.unique_no course_no');
 		
 		foreach ($rows as &$row) {
 			$examResult = examResultDAO::newInstance()->filter(['uid'=>$uid, 'exam_id'=>$row['id']])->find();
