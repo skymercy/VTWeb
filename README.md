@@ -72,8 +72,15 @@ defined('SYS_ENV') or define('SYS_ENV', 'pre');
 
 7. 确保目录可写权限，如果运行中有权限错误，可自行创建所需目录
  
+#### 部署(推荐)
 
-#### 部署
+install.php
+
+ex: vtweb.site/install.php
+
+一键部署数据
+
+#### 部署(1)
 
 1. 创建数据库,  并执行 使用 /database 目录下的sql文件，初始化数据库结构
 2. 配置入口文件中的, SYS_ENV 的模式, 并再对应的/app/config/dns_*.php中，配置数据库，redis等服务信息
