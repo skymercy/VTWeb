@@ -31,8 +31,12 @@ if (file_exists($indexFile)) {
 if (!is_readable($pubTplFile)) {
 	$errors[] = "权限错误, 文件需要可读权限: " . $pubTplFile;
 }
-if (!is_writable($pubFile)) {
-	$errors[] = "权限错误, 文件需要可写权限: " . $pubFile;
+if (file_exists($pubFile)) {
+	if (!is_writable($pubFile)) {
+		$errors[] = "权限错误, 文件需要可写权限: " . $pubFile;
+	}
+} else if (!is_writable(dirname($pubFile))) {
+	$errors[] = "权限错误, 目录需要可写权限: " . dirname($pubFile);
 }
 
 if (!empty($errors)) {
@@ -111,11 +115,11 @@ if ($action == 'install') {
 	//
 	echo "<p>写入配置文件 {$pubFile} </p>";
 	$tplContent = file_get_contents($pubTplFile);
-	$content = str_replace("[[db_addr]]", $dbCfg['db_addr'], $tplContent);
-	$content = str_replace("[[db_user]]", $dbCfg['db_user'], $content);
-	$content = str_replace("[[db_pwd]]", $dbCfg['db_pwd'], $content);
-	$content = str_replace("[[db_name]]", $dbCfg['db_name'], $content);
-	$content = str_replace("[[redis_addr]]", $dbCfg['redis_addr'], $content);
+	$content = str_replace("[[db_addr]]", $db_addr, $tplContent);
+	$content = str_replace("[[db_user]]", $db_user, $content);
+	$content = str_replace("[[db_pwd]]",  $db_pwd, $content);
+	$content = str_replace("[[db_name]]", $db_name, $content);
+	$content = str_replace("[[redis_addr]]", $redis_addr, $content);
 	file_put_contents($pubFile, $content);
 	echo sprintf("<p>%s  , OK</p>",  date('Y-m-d H:i:s') );
 	//
@@ -123,6 +127,13 @@ if ($action == 'install') {
 	$tplContent = file_get_contents($indexExampleFile);
 	$content = str_replace("[[env]]", "pub", $tplContent);
 	file_put_contents($indexFile, $content);
+	echo sprintf("<p>%s  , OK</p>",  date('Y-m-d H:i:s') );
+	//
+	echo "<p>创建管理员 </p>";
+	include dirname(__DIR__) . DIRECTORY_SEPARATOR . 'extends' . DIRECTORY_SEPARATOR . 'YiiSecurity.php';
+	$sql = sprintf("insert into `user` (`username`,`nickname`,`role`,`email`,`phone`,`password_hash`,`status`,`updated_at`,`created_at`) values ('%s','超级管理员',99,'test@test.com','18688889999','%s', '0','%s','%s')"
+	, $admin_user, YiiSecurity::generatePasswordHash($admin_pwd), time(), time());
+	mysqli_query($handler, $sql);
 	echo sprintf("<p>%s  , OK</p>",  date('Y-m-d H:i:s') );
 	//
 	echo '<p>写入文件 .lock </p>';
