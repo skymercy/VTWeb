@@ -56,7 +56,7 @@
             </li>
         </ul>
     </li>
-	<li class="<?=(isset($sidebar['course'])? 'active open' : '')?>">
+	<li class="<?=((isset($sidebar['course']) || isset($sidebar['exam']))? 'active open' : '')?>">
 		<a href="javascript:;" class="dropdown-toggle">
 			<i class="menu-icon fa fa-gavel"></i>
 			<span class="menu-text">实验课程管理</span>
@@ -80,6 +80,12 @@
 				<a href="<?=$routerRoot?>/course/exam">
 					<i class="menu-icon fa fa-caret-right"></i>
 					考试管理
+				</a>
+			</li>
+			<li class="<?=(isset($sidebar['exam-index'])? 'active' : '')?>">
+				<a href="<?=$routerRoot?>/exam">
+					<i class="menu-icon fa fa-caret-right"></i>
+					考试统计
 				</a>
 			</li>
 		</ul>

@@ -10,7 +10,10 @@ namespace app\controller\manage;
 
 use APP;
 use app\controller\base\baseAction;
+use app\dao\classesDAO;
 use app\dao\examClassesDAO;
+use app\dao\examDAO;
+use app\dao\studentDAO;
 use app\model\user;
 
 class examAction extends baseAction
@@ -26,7 +29,7 @@ class examAction extends baseAction
 		if (empty($id)) {
 			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
 		}
-		$instance = App::$model->exam($id);
+		$instance =$instance = App::$model->exam($id);
 		if (!$instance->exist()) {
 			return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
 		}
@@ -77,5 +80,54 @@ class examAction extends baseAction
 			return $this->json(['error'=>0, 'message'=>'Success!']);
 		}
 		return $this->json(['error'=>'-1','message'=>'非法数据']);
+	}
+	
+	
+	public function action_index() {
+		$this->setBreadcrumb('考试统计', true);
+		$result = examDAO::searchExam($this->searchData);
+		$pages = [
+			'total' => $result['total'],
+			'num' => $result['num'],
+		];
+		return $this->display('manage/course/exam2', ['items' => $result['rows'], 'pages'=>$pages]);
+	}
+	
+	
+	public function action_chart() {
+		
+		$examId = $this->get('examId', 0);
+		if (empty($examId)) {
+			return $this->error('出错了, 数据错误');
+		}
+		$exam = $instance = App::$model->exam($examId);
+		if (!$exam->exist()) {
+			return $this->error('出错了, 数据错误');
+		}
+		
+		$classesRows = examClassesDAO::newInstance()
+			->leftJoin(classesDAO::newInstance(), ['classes_id'=>'id'])
+			->filter([['exam_id'=> $examId]])
+			->query("classes.title");
+		
+		$titles = [];
+		foreach ($classesRows as $row) {
+			$titles[] = $row['title'];
+		}
+		
+		$examData = $exam->attributes();
+		
+		$examData['classes'] = implode(',', $titles);
+		
+		$this->searchData['examId'] = $examId;
+		
+		$result = studentDAO::searchStudentExamResult($this->searchData);
+		
+		$pages = [
+			'total' => $result['total'],
+			'num' => $result['num'],
+		];
+		
+		return $this->display('manage/course/exam_chart',['exam'=> $examData, 'items'=>$result['rows'], 'pages'=>$pages]);
 	}
 }

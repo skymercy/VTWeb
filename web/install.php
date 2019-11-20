@@ -15,7 +15,7 @@ $errors = [];
 if (file_exists($lockFile)) {
 	exit('系统已初始化，无需重复初始化');
 }
-if (!is_readable($dbDir)) {
+if (!is_writable($dbDir)) {
 	$errors[] = "权限错误, 目录需要可读权限: " . $dbDir;
 }
 if (!is_readable($indexExampleFile)) {
@@ -94,6 +94,10 @@ if ($action == 'install') {
 		exit;
 	}
 	foreach (glob($dbDir . DIRECTORY_SEPARATOR . '*.sql') as $filename) {
+		$sqlLockFile = $filename. ".lock";
+		if (file_exists($sqlLockFile)) {
+			continue;
+		}
 		echo sprintf("<p>Execute Sql File : %s</p>" , $filename);
 		$content = file_get_contents($filename);
 		$sqlList = explode(";", $content);
@@ -108,10 +112,11 @@ if ($action == 'install') {
 				exit;
 			}
 		}
+		touch($sqlLockFile);
 		echo sprintf("<p>%s  , OK</p>",  date('Y-m-d H:i:s') );
 		
 	}
-	
+	mysqli_close($handler);
 	//
 	echo "<p>写入配置文件 {$pubFile} </p>";
 	$tplContent = file_get_contents($pubTplFile);

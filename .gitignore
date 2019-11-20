@@ -42,3 +42,4 @@ web/ueditor/php
 web/uploads
 web/install.lock
 app/config/dns_pub.php
+a.md
