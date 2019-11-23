@@ -114,9 +114,8 @@ if ($action == 'install') {
 		}
 		touch($sqlLockFile);
 		echo sprintf("<p>%s  , OK</p>",  date('Y-m-d H:i:s') );
-		
 	}
-	mysqli_close($handler);
+	
 	//
 	echo "<p>写入配置文件 {$pubFile} </p>";
 	$tplContent = file_get_contents($pubTplFile);
@@ -145,6 +144,8 @@ if ($action == 'install') {
 	touch($lockFile);
 	echo sprintf("<p>%s  , OK</p>",  date('Y-m-d H:i:s') );
 	//
+	
+	mysqli_close($handler);
 	exit;
 }
 
