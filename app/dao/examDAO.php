@@ -70,6 +70,7 @@ class examDAO extends baseDAO
 		
 		foreach ($questions as $question) {
 			$items = questionItemDAO::getItems($question['id']);
+			$items = \YiiArray::index($items, 'id');
 			examQuestionDAO::newInstance()->add([
 				'exam_id' => $examId,
 				'src_id' => $question['id'],

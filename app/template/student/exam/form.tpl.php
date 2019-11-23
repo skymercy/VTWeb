@@ -44,7 +44,7 @@
 													</label>
 												</div>
 											<?php endforeach;?>
-										<?php elseif ($k == \app\model\question::Type_Select_Text):?>
+										<?php elseif ($k == -1):?>
 											<textarea rows="10" cols="100" name="ExamContent[<?=$question['id']?>]"><?=(isset($existResultContent[$question['id']])) ? $existResultContent[$question['id']] : '' ?></textarea>
 										<?php endif;?>
 									</div>

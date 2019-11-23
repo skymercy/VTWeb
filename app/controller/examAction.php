@@ -13,7 +13,9 @@ use app\controller\base\baseAction;
 use app\dao\examClassesDAO;
 use app\dao\examDAO;
 use app\dao\examResultDAO;
+use app\model\exam;
 use app\model\examResult;
+use app\model\question;
 
 class examAction extends baseAction
 {
@@ -206,6 +208,65 @@ class examAction extends baseAction
 				$instance->end_at = time();
 				$instance->status = examResult::Status_Submit;
 				$instance->save();
+				//自动评分
+				$examData = examDAO::getExamData($instance->exam_id);
+				$canAutoScore = true;
+				foreach ($examData as $t => $v) {
+					if ($t != question::Type_Select && $t != question::Type_Select_Multiple) {
+						$canAutoScore = false;
+						break;
+					}
+				}
+				if ($canAutoScore) {
+					$autoScore = 0;
+					$errorQuestions = [];
+					$correctQuestions = [];
+					//都是选择题，可以自动评分
+					foreach ($examData as $k=>$questions) {
+						foreach ($questions as $question) {
+							$qid = $question['id'];
+							if (isset($examContentData[$qid])) {
+								if ($k == question::Type_Select) {
+									//单选题
+									$answerItemId = $examContentData[$qid];
+									$item = $question['items'][$answerItemId];
+									if ($item['is_correct']) {
+										$autoScore += $question['score'];
+										$correctQuestions[] = $qid;
+									} else {
+										$errorQuestions[] = $qid;
+									}
+								} else if ($k == question::Type_Select_Multiple) {
+									//多选题
+									$answerItemIds = $examContentData[$qid];
+									$correct = true;
+									foreach ($question['items'] as $item) {
+										if ($item['is_correct'] == 1 && !in_array($item['id'], $answerItemIds)) {
+											$correct = false;
+											break;
+										}else if ($item['is_correct'] == 0 && in_array($item['id'], $answerItemIds)) {
+											$correct = false;
+											break;
+										}
+									}
+									if ($correct) {
+										$correctQuestions[] = $qid;
+										$autoScore += $question['score'];
+									} else {
+										$errorQuestions[] = $qid;
+									}
+								}
+							}
+						}
+					}
+					
+					$instance->auto_score = $autoScore;
+					$instance->error_questions = implode(',', $errorQuestions);
+					$instance->correct_questions = implode(',', $correctQuestions);
+					$instance->status = examResult::Status_Check;
+					$instance->updated_at = time();
+					$instance->save();
+				}
 				return $this->json(['error'=>0, 'message'=>'Success!','redirectUri'=>'/exam']);
 			}
 		}

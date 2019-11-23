@@ -14,9 +14,14 @@ namespace app\model;
  * @property int $uid
  * @property int $exam_id
  * @property int $score
+ * @property int $auto_score
+ * @property int $manual_score
+ * @property int $lab_score
  * @property int $start_at
  * @property int $end_at
- * @property int $content
+ * @property string $content
+ * @property string $error_questions
+ * @property string $correct_questions
  * @property int $expired_at
  *
  * @package app\model

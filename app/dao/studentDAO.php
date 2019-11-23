@@ -36,7 +36,7 @@ class studentDAO extends baseDAO
 			->filter([[], [], [], ['id'=>$filters['examId']], [], [] ])
 			->order( [['uid' => 'desc']] )
 			->limit($pageSize, $offset)
-			->query('user.id,user.nickname,student.student_no,classes.title class_title,examResult.score,examResult.id result_id,examResult.status,examResult.start_at,examResult.end_at');
+			->query('user.id,user.nickname,student.student_no,classes.title class_title,examResult.score,examResult.auto_score,examResult.manual_score,examResult.lab_score,examResult.id result_id,examResult.status,examResult.start_at,examResult.end_at');
 		
 		return [
 			'total' => $cnt,

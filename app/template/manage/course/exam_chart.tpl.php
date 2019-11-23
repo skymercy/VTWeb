@@ -45,7 +45,9 @@ use app\model\examResult;
 						<th style="width: 10%;">答题时间</th>
 						<th style="width: 10%;">交卷时间</th>
 						<th style="width: 5%;">考试时长</th>
-						<th style="width: 5%;">得分</th>
+						<th style="width: 5%;">试卷得分</th>
+						<th style="width: 5%;">思考题得分</th>
+						<th style="width: 5%;">实验得分</th>
 						<th style="width: 5%;">操作</th>
 					</tr>
 					</thead>
@@ -60,7 +62,9 @@ use app\model\examResult;
 							<td><span> <?=(!empty($item['result_id']) && !empty($item['start_at'])) ? date('Y/m/d H:i',$item['start_at']) : '-'  ?> </span></td>
 							<td><span> <?=(!empty($item['result_id']) && !empty($item['end_at'])) ? date('Y/m/d H:i',$item['end_at']) : '-' ?> </span></td>
 							<td><span> <?=(!empty($item['result_id']) && !empty($item['start_at']) && !empty($item['end_at']) ) ?  ceil(($item['end_at']-$item['start_at'])/60) . '分钟' : '-' ?>  </span></td>
-							<td><span> <?=(!empty($item['result_id']) || is_null($item['score'])) ? '-' : sprintf("%0.2f分",$item['score']/100 )?> </span></td>
+							<td><span> <?=(empty($item['result_id']) || is_null($item['auto_score'])) ? '-' : sprintf("%0.2f分",$item['auto_score']/100 )?> </span></td>
+							<td><span> <?=(empty($item['result_id']) || is_null($item['manual_score'])) ? '-' : sprintf("%0.2f分",$item['manual_score']/100 )?> </span></td>
+							<td><span> <?=(empty($item['result_id']) || is_null($item['lab_score'])) ? '-' : sprintf("%0.2f分",$item['lab_score']/100 )?> </span></td>
 							<td>
 								<div class="hidden-sm hidden-xs btn-group">
 									<a href="javascript:;" class="btn btn-xs btn-info btn-edit-exam" data-id="<?=$item['id']?>">
