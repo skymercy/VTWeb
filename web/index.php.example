@@ -1,4 +1,9 @@
 <?php
+
+if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'install.lock')) {
+	header('Location: /index.php');
+}
+
 date_default_timezone_set('Asia/Shanghai');
 
 defined('SYS_DEBUG') or define('SYS_DEBUG', true);

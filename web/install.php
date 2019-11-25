@@ -1,5 +1,10 @@
 <?php
 
+if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'install.lock')) {
+	header('Location: /index.php');
+}
+
+
 /**@var string $webRoot */
 $webRoot = '';
 
