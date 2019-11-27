@@ -24,6 +24,10 @@ class examAction extends baseAction
 		parent::init();
 	}
 	
+	public function action_ajax_result_info() {
+		return $this->json(['error'=>0]);
+	}
+	
 	public function action_ajax_info() {
 		$id = $this->param('id', 0);
 		if (empty($id)) {

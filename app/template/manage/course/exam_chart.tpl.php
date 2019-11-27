@@ -66,11 +66,13 @@ use app\model\examResult;
 							<td><span> <?=(empty($item['result_id']) || is_null($item['manual_score'])) ? '-' : sprintf("%0.2f分",$item['manual_score']/100 )?> </span></td>
 							<td><span> <?=(empty($item['result_id']) || is_null($item['lab_score'])) ? '-' : sprintf("%0.2f分",$item['lab_score']/100 )?> </span></td>
 							<td>
+								<?php if (!empty($item['result_id']) && ($item['status'] == examResult::Status_Submit || $item['status'] == examResult::Status_Check)):?>
 								<div class="hidden-sm hidden-xs btn-group">
-									<a href="javascript:;" class="btn btn-xs btn-info btn-edit-exam" data-id="<?=$item['id']?>">
+									<a href="javascript:;" class="btn btn-xs btn-info btn-view-result" data-id="<?=$item['result_id']?>">
 										<i class="ace-icon fa fa-search bigger-120"></i> 查看
 									</a>
 								</div>
+								<?php endif; ?>
 							</td>
 						</tr>
 					<?php endforeach;?>
@@ -95,76 +97,48 @@ use app\model\examResult;
 </div>
 
 	<!-- 编辑考题（Modal） -->
-	<div class="modal fade" id="publishQuestionModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal fade" id="studentResultInfoModal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content" style="background: transparent;">
 				<div class="widget-box">
 					<div class="widget-header">
 						<h5 class="widget-title">
-							编辑考试信息
+							成绩详情
 						</h5>
 					</div>
 					<div class="widget-body">
 						<div class="widget-main">
 							<div class="row">
 								<div class="col-sm-12">
-									<div class="j-publish-errors">
-									
+									<div class="tabbable">
+										<ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
+											<li class="active">
+												<a data-toggle="tab" href="#tab1">试卷详情</a>
+											</li>
+
+											<li>
+												<a data-toggle="tab" href="#tab2">思考题详情</a>
+											</li>
+
+											<li>
+												<a data-toggle="tab" href="#tab3">实验详情</a>
+											</li>
+										</ul>
+
+										<div class="tab-content">
+											<div id="tab1" class="tab-pane in active">
+												<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
+											</div>
+
+											<div id="tab2" class="tab-pane">
+												<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+											</div>
+
+											<div id="tab3" class="tab-pane">
+												<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+											</div>
+										</div>
 									</div>
-								</div>
-								<div class="col-sm-12">
-									<form id="exam-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
-										<input type="hidden" name="Exam[id]" value="0">
-										<input type="hidden" name="Exam[course_id]" value="0">
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" > 标题 </label>
-											<div class="col-sm-10 col-sm-9">
-												<input type="text" class="form-control" name="Exam[title]">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >考试时长</label>
-											<div class="col-xs-10  col-sm-3">
-												<select class="chosen-select" name="Exam[duration]">
-													<option value="1800">0.5小时</option>
-													<option value="3600">1小时</option>
-													<option value="5400">1.5小时</option>
-													<option value="7200">2小时</option>
-													<option value="9000">2.5小时</option>
-													<option value="10800">3小时</option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >考试班级</label>
-											<div class="col-xs-10  col-sm-10">
-												<select class="chosen-select j-exam-classes" name="Exam[classes][]" multiple="multiple">
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >开始时间</label>
-											<div class="col-xs-10  col-sm-9">
-												<input type="date" name="Exam[start_date]">
-												<input type="time" name="Exam[start_time]">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >结束时间</label>
-											<div class="col-xs-10  col-sm-9">
-												<input type="date" name="Exam[end_date]">
-												<input type="time" name="Exam[end_time]">
-											</div>
-										</div>
-										<div class="clearfix form-actions">
-											<div class="col-md-offset-2 col-md-9">
-												<button class="btn btn-info" type="submit">
-													<i class="ace-icon fa fa-check bigger-110"></i>
-													保存
-												</button>
-											</div>
-										</div>
-									</form>
 								</div>
 							</div>
 						</div>
@@ -180,44 +154,10 @@ use app\model\examResult;
 <script src="<?=$webRoot?>/assets/js/jquery.validate.min.js"></script>
 <script type="text/javascript">
 	$(function () {
-		
-		$('#exam-form').validate({
-			errorElement: 'div',
-			errorClass: 'help-block',
-			focusInvalid: false,
-			ignore: "",
-			submitHandler: function (form) {
-				var formData = new FormData($('#exam-form')[0]);
-				postRequest('<?=$routerRoot?>/exam/ajax_edit_post', formData);
-			}
-		})
-		
-		$('.btn-edit-exam').on('click', function(){
-			var examId = $(this).attr('data-id');
-			postRequest('<?=$routerRoot?>/exam/ajax_info?id='+examId,{},function(data){
-				$("#exam-form")[0].reset();
-				$("#exam-form").find('input[name="Exam[id]"]').val(data.data.id);
-				$("#exam-form").find('input[name="Exam[course_id]"]').val(data.data.course_id);
-				$("#exam-form").find('input[name="Exam[title]"]').val(data.data.title);
-				$("#exam-form").find('input[name="Exam[start_date]"]').val(data.data.start_date);
-				$("#exam-form").find('input[name="Exam[start_time]"]').val(data.data.start_time);
-				$("#exam-form").find('input[name="Exam[end_date]"]').val(data.data.end_date);
-				$("#exam-form").find('input[name="Exam[end_time]"]').val(data.data.end_time);
-				$("#exam-form").find('select[name="Exam[duration]"]').val(data.data.duration);
-				if (data.classes) {
-					var optionHtml = '';
-					for(var k in data.classes) {
-						if (data.data.classes[k]) {
-							optionHtml += '<option value="'+k+'" selected>'+data.classes[k]+'</option>';
-						} else {
-							optionHtml += '<option value="'+k+'">'+data.classes[k]+'</option>';
-						}
-						
-					}
-					$('.j-exam-classes').html(optionHtml);
-				}
-				refreshChosen();
-				$('#publishQuestionModal').modal('show');
+		$('.btn-view-result').on('click', function(){
+			var resultId = $(this).attr('data-id');
+			postRequest('<?=$routerRoot?>/exam/ajax_result_info?id='+resultId,{},function(data){
+				$('#studentResultInfoModal').modal('show');
 			},'get')
 		});
 
