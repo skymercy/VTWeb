@@ -118,23 +118,30 @@ class baseAction extends Action
 	public static function request() {
 		return App::$base->request;
 	}
-	
+
 	public static function redirectToLoginPage() {
-		self::request()->redirect('/login');
+		self::request()->redirect(self::_sWebRoot() . '/login');
 	}
 	
 	public static function redirectToManageIndexPage() {
-		self::request()->redirect('/manage');
+		self::request()->redirect(self::_sWebRoot() . '/manage');
 	}
 	
 	public static function redirectToStudentIndexPage() {
-		self::request()->redirect('/');
+		self::request()->redirect(self::_sWebRoot() . '/');
 	}
 	
 	public static function redirectToTeacherIndexPage() {
-		self::request()->redirect('/teacher');
+		self::request()->redirect(self::_sWebRoot() . '/teacher');
 	}
-	
+
+    private static function _sWebRoot() {
+        if (self::$_webRoot == null) {
+            self::$_webRoot = App::$base->app_config->get('webRoot');
+        }
+        return self::$_webRoot;
+    }
+
 	public function webRoot() {
     	if (self::$_webRoot == null) {
     		self::$_webRoot = App::$base->app_config->get('webRoot');
