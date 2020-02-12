@@ -1,7 +1,7 @@
 <?php
 
-if (file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'install.lock')) {
-	header('Location: /install.php');
+if (!file_exists(__DIR__ . DIRECTORY_SEPARATOR . 'install.lock')) {
+    exit('请安装');
 }
 
 date_default_timezone_set('Asia/Shanghai');
