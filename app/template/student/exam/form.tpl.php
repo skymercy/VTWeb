@@ -75,12 +75,12 @@
 <script type="text/javascript">
 	$(function () {
 		$('.j-btn-save').on('click', function () {
-			postRequest('/exam/ajax_save', new FormData($('#exam-form')[0]), function(resp){
+			postRequest('<?=$routerRoot?>/exam/ajax_save', new FormData($('#exam-form')[0]), function(resp){
 				console.log(resp);
 			});
 		});
 		$('.j-btn-submit').on('click', function () {
-			postRequest('/exam/ajax_submit', new FormData($('#exam-form')[0]));
+			postRequest('<?=$routerRoot?>/exam/ajax_submit', new FormData($('#exam-form')[0]));
 		});
 	});
 </script>

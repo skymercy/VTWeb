@@ -56,7 +56,7 @@
 							<div class="widget-body">
 								<div class="widget-main">
 									<div class="space-6"></div>
-									<form id="login-form" method="post" action="/login/login">
+									<form id="login-form" method="post" action="<?=$routerRoot?>/login/login">
 										<input type="text" name="_csrf" hidden value="<?=$this->getCsrfToken()?>"/>
 										<fieldset>
 											<div class="form-group">

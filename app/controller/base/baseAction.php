@@ -119,23 +119,32 @@ class baseAction extends Action
 		return App::$base->request;
 	}
 
+    /***
+     * 站内跳转
+     * @param $router
+     */
+	public static function innerRedirect($router) {
+        self::request()->redirect( self::webRoot2() . $router);
+    }
+
 	public static function redirectToLoginPage() {
-		self::request()->redirect(self::_sWebRoot() . '/login');
+	    self::innerRedirect('/login');
 	}
 	
 	public static function redirectToManageIndexPage() {
-		self::request()->redirect(self::_sWebRoot() . '/manage');
+        self::innerRedirect('/manage');
 	}
 	
 	public static function redirectToStudentIndexPage() {
-		self::request()->redirect(self::_sWebRoot() . '/');
+        self::innerRedirect('/');
 	}
 	
 	public static function redirectToTeacherIndexPage() {
-		self::request()->redirect(self::_sWebRoot() . '/teacher');
+        self::innerRedirect('/teacher');
 	}
 
-    private static function _sWebRoot() {
+
+    public static function webRoot2() {
         if (self::$_webRoot == null) {
             self::$_webRoot = App::$base->app_config->get('webRoot');
         }
