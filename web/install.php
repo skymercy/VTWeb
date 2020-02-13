@@ -20,11 +20,11 @@ $errors = [];
 if (file_exists($lockFile)) {
 	exit('系统已初始化，无需重复初始化');
 }
-if (!is_writable($dbDir)) {
+if (!is_writeable($dbDir)) {
 	$errors[] = "权限错误, 目录需要可读权限: " . $dbDir;
 }
 if (!is_readable($indexExampleFile)) {
-	$errors[] = "权限错误, 文件需要可读权限: " . $dbDir;
+	$errors[] = "权限错误, 文件需要可读权限: " . $indexExampleFile;
 }
 if (file_exists($indexFile)) {
 	if (!is_writable($indexFile)) {
@@ -40,7 +40,7 @@ if (file_exists($pubFile)) {
 	if (!is_writable($pubFile)) {
 		$errors[] = "权限错误, 文件需要可写权限: " . $pubFile;
 	}
-} else if (!is_writable(dirname($pubFile))) {
+} else if (!is_writeable(dirname($pubFile))) {
 	$errors[] = "权限错误, 目录需要可写权限: " . dirname($pubFile);
 }
 
