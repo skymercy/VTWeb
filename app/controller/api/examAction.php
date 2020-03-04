@@ -49,6 +49,6 @@ class examAction extends baseAction
 			'created_at' => time(),
 		]);
 		
-		return $this->successJson(['uri'=> self::request()->getHostInfo() .  "/exam/access/{$examToken}"]);
+		return $this->successJson(['uri'=> $this->webRoot() .  "/exam/access/{$examToken}"]);
 	}
 }

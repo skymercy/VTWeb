@@ -18,7 +18,7 @@
 						<tr class="j-tag-item-<?=$item['id']?>">
 							<td class="j-item-id"><span><?=$item['id']?></span></td>
 							<td class="j-item-title"><span><?=$item['title']?></span></td>
-							<td class="j-item-title"><span><?=$item['teacher']?></span></td>
+							<td class="j-item-title"><span><?=$item['teacherName']?></span></td>
 						</tr>
 					<?php endforeach;?>
 					</tbody>

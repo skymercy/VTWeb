@@ -31,7 +31,7 @@ class classesCourseDAO extends baseDAO
 			->filter([$filters, [], []])
 			->order( [['id' => 'desc']] )
 			->limit($pageSize, $offset)
-			->query('classesCourse.*,course.title,user.nickname teacher');
+			->query('classesCourse.*,course.title,user.nickname teacherName');
 	
 		return [
 			'total' => $cnt,
