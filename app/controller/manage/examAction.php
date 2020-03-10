@@ -13,7 +13,11 @@ use app\controller\base\baseAction;
 use app\dao\classesDAO;
 use app\dao\examClassesDAO;
 use app\dao\examDAO;
+use app\dao\examQuestionDAO;
+use app\dao\examResultDAO;
+use app\dao\questionDAO;
 use app\dao\studentDAO;
+use app\model\question;
 use app\model\user;
 
 class examAction extends baseAction
@@ -23,9 +27,50 @@ class examAction extends baseAction
 	public function init() {
 		parent::init();
 	}
-	
+
+
 	public function action_ajax_result_info() {
-		return $this->json(['error'=>0]);
+        $id = $this->param('id', 0);
+        $examResult = examResultDAO::newInstance()->filter(['id'=>$id])->find();
+        if (empty($examResult)) {
+            return $this->json(['error'=>-1, 'message'=>'出错了, 数据错误']);
+        }
+        $examId = $examResult['exam_id'];
+        $examResultContent = json_decode($examResult['content'], true);
+        $examResultCorrectQuestions = explode(",", $examResult['correct_questions']);
+        $examQuestion = examQuestionDAO::newInstance()->filter(['exam_id'=>$examId])->query();
+
+        $autoData = [
+            'score' => sprintf("%0.2f分",$examResult['auto_score']/100 ),
+            'questions' => [],
+        ];
+
+        foreach ($examQuestion as $question) {
+            $qid = $question['id'];
+            $question['items'] = json_decode($question['items'], true);
+            $question['correct_items'] = [];
+            $question['type'] = question::getTypeName($question['type']);
+            $selected = isset($examResultContent[$qid]) ? explode(",", $examResultContent[$qid]) : [];
+            $question['selected_items'] = [];
+            foreach ($question['items'] as &$item) {
+                $item['alias'] = chr($item['sort']+65);
+                if ($item['is_correct']) {
+                    $question['correct_items'][] = $item['alias'] ;
+                }
+                if (in_array($item['id'], $selected)) {
+                    $question['selected_items'][] = $item['alias'];
+                }
+            }
+            $question['correct_items'] = implode(",", $question['correct_items']);
+            $question['selected_items'] = implode(",", $question['selected_items']);
+
+            $question['selected_correct'] = in_array($qid, $examResultCorrectQuestions) ? true : false;
+            $autoData['questions'][] = $question;
+        }
+
+        return $this->json(['error'=>0, 'data'=>[
+            'auto' => $autoData
+        ]]);
 	}
 	
 	public function action_ajax_info() {

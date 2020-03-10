@@ -127,15 +127,13 @@ use app\model\examResult;
 
 										<div class="tab-content">
 											<div id="tab1" class="tab-pane in active">
-												<p>Raw denim you probably haven't heard of them jean shorts Austin.</p>
 											</div>
-
 											<div id="tab2" class="tab-pane">
-												<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.</p>
+												<p>...</p>
 											</div>
 
 											<div id="tab3" class="tab-pane">
-												<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade.</p>
+                                                <p>...</p>
 											</div>
 										</div>
 									</div>
@@ -153,11 +151,34 @@ use app\model\examResult;
 <!-- inline scripts related to this page -->
 <script src="<?=$webRoot?>/assets/js/jquery.validate.min.js"></script>
 <script type="text/javascript">
+
+    function renderAutoData(autoData) {
+        console.log(autoData);
+        var html = '';
+        html += "<p>得分: " + autoData.score + "</p>";
+        html += "<hr/>";
+        for(var k in autoData.questions) {
+            var question = autoData.questions[k];
+            html += "<p>";
+            html += "[" + question.type + "] " + question.title + question.content + "</br>";
+            for(var kk in question.items)  {
+                var item = question.items[kk];
+                html += item.alias + ":&nbsp;&nbsp;<b>" + item.title + item.content + "</b></br>";
+            }
+            html += "正确答案: " + question.correct_items + "</br>";
+            html += "考生答案: " + question.selected_items + "</br>";
+
+            html += "</p>";
+            html += "<hr/>";
+        }
+        $('#tab1').html(html);
+    }
 	$(function () {
 		$('.btn-view-result').on('click', function(){
 			var resultId = $(this).attr('data-id');
 			postRequest('<?=$routerRoot?>/exam/ajax_result_info?id='+resultId,{},function(data){
 				$('#studentResultInfoModal').modal('show');
+                renderAutoData(data.data.auto);
 			},'get')
 		});
 
