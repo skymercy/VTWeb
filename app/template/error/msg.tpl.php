@@ -17,7 +17,7 @@
 <div class="messageUrl">
     现在您可以：
     <a href="javascript:window.history.go(-1);" class='mlink'>[后退]</a>
-    <a href="/" class='mlink'>[返回首页]</a>
+    <a href="<?=$webRoot?>" class='mlink'>[返回首页]</a>
 </div>
 
 <?php if (!App::$base->request->isAjax()){?>

@@ -61,7 +61,7 @@
                 <ul class="breadcrumb">
                     <li>
                         <i class="ace-icon fa fa-home home-icon"></i>
-                        <a href="/">首页</a>
+                        <a href="<?=$webRoot?>">首页</a>
                     </li>
                     <?php foreach ($breadcrumbs as $breadcrumb): ?>
                         <?php if($breadcrumb['active']): ?>

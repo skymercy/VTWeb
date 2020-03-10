@@ -8,5 +8,5 @@
 <div>
     现在您可以：
     <a href="javascript:window.history.go(-1);">[后退]</a>
-    <a href="/">[返回首页]</a>
+    <a href="<?=$webRoot?>">[返回首页]</a>
 </div>
