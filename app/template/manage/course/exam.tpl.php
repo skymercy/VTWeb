@@ -84,69 +84,92 @@
 						</h5>
 					</div>
 					<div class="widget-body">
-						<div class="widget-main">
-							<div class="row">
-								<div class="col-sm-12">
-									<div class="j-publish-errors">
-									
-									</div>
-								</div>
-								<div class="col-sm-12">
-									<form id="exam-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
-										<input type="hidden" name="Exam[id]" value="0">
-										<input type="hidden" name="Exam[course_id]" value="0">
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" > 标题 </label>
-											<div class="col-sm-10 col-sm-9">
-												<input type="text" class="form-control" name="Exam[title]">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >考试时长</label>
-											<div class="col-xs-10  col-sm-3">
-												<select class="chosen-select" name="Exam[duration]">
-													<option value="1800">0.5小时</option>
-													<option value="3600">1小时</option>
-													<option value="5400">1.5小时</option>
-													<option value="7200">2小时</option>
-													<option value="9000">2.5小时</option>
-													<option value="10800">3小时</option>
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >考试班级</label>
-											<div class="col-xs-10  col-sm-10">
-												<select class="chosen-select j-exam-classes" name="Exam[classes][]" multiple="multiple">
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >开始时间</label>
-											<div class="col-xs-10  col-sm-9">
-												<input type="date" name="Exam[start_date]">
-												<input type="time" name="Exam[start_time]">
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-2 control-label no-padding-left" >结束时间</label>
-											<div class="col-xs-10  col-sm-9">
-												<input type="date" name="Exam[end_date]">
-												<input type="time" name="Exam[end_time]">
-											</div>
-										</div>
-										<div class="clearfix form-actions">
-											<div class="col-md-offset-2 col-md-9">
-												<button class="btn btn-info" type="submit">
-													<i class="ace-icon fa fa-check bigger-110"></i>
-													保存
-												</button>
-											</div>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+                        <div class="widget-main">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="tabbable">
+                                        <ul class="nav nav-tabs padding-12 tab-color-blue background-blue" id="myTab4">
+                                            <li class="active">
+                                                <a data-toggle="tab" href="#tab1">信息</a>
+                                            </li>
+
+                                            <li>
+                                                <a data-toggle="tab" href="#tab2">内容</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content">
+                                            <div id="tab1" class="tab-pane in active">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="j-publish-errors">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-12">
+                                                        <form id="exam-form"  class="form-horizontal" role="form" enctype="multipart/form-data">
+                                                            <input type="hidden" name="Exam[id]" value="0">
+                                                            <input type="hidden" name="Exam[course_id]" value="0">
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-left" > 标题 </label>
+                                                                <div class="col-sm-10 col-sm-9">
+                                                                    <input type="text" class="form-control" name="Exam[title]">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-left" >考试时长</label>
+                                                                <div class="col-xs-10  col-sm-3">
+                                                                    <select class="chosen-select" name="Exam[duration]">
+                                                                        <option value="1800">0.5小时</option>
+                                                                        <option value="3600">1小时</option>
+                                                                        <option value="5400">1.5小时</option>
+                                                                        <option value="7200">2小时</option>
+                                                                        <option value="9000">2.5小时</option>
+                                                                        <option value="10800">3小时</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-left" >考试班级</label>
+                                                                <div class="col-xs-10  col-sm-10">
+                                                                    <select class="chosen-select j-exam-classes" name="Exam[classes][]" multiple="multiple">
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-left" >开始时间</label>
+                                                                <div class="col-xs-10  col-sm-9">
+                                                                    <input type="date" name="Exam[start_date]">
+                                                                    <input type="time" name="Exam[start_time]">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label class="col-sm-2 control-label no-padding-left" >结束时间</label>
+                                                                <div class="col-xs-10  col-sm-9">
+                                                                    <input type="date" name="Exam[end_date]">
+                                                                    <input type="time" name="Exam[end_time]">
+                                                                </div>
+                                                            </div>
+                                                            <div class="clearfix form-actions">
+                                                                <div class="col-md-offset-2 col-md-9">
+                                                                    <button class="btn btn-info" type="submit">
+                                                                        <i class="ace-icon fa fa-check bigger-110"></i>
+                                                                        保存
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="tab2" class="tab-pane">
+                                                <p>...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -169,7 +192,25 @@
 				var formData = new FormData($('#exam-form')[0]);
 				postRequest('<?=$routerRoot?>/exam/ajax_edit_post', formData);
 			}
-		})
+		});
+
+		function renderQuestions(questions) {
+            var html = '';
+            for(var k in questions) {
+                var question = questions[k];
+                html += "<p>";
+                html += "[" + question.type + "] " + question.title + question.content + "</br>";
+                for(var kk in question.items)  {
+                    var item = question.items[kk];
+                    html += item.alias + ":&nbsp;&nbsp;<b>" + item.title + item.content + "</b></br>";
+                }
+                html += "正确答案: " + question.correct_items + "</br>";
+
+                html += "</p>";
+                html += "<hr/>";
+            }
+            $('#tab2').html(html);
+        }
 		
 		$('.btn-edit-exam').on('click', function(){
 			var examId = $(this).attr('data-id');
@@ -195,6 +236,7 @@
 					}
 					$('.j-exam-classes').html(optionHtml);
 				}
+				renderQuestions(data.data.questions);
 				refreshChosen();
 				$('#publishQuestionModal').modal('show');
 			},'get')

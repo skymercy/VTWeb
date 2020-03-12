@@ -153,7 +153,6 @@ use app\model\examResult;
 <script type="text/javascript">
 
     function renderAutoData(autoData) {
-        console.log(autoData);
         var html = '';
         html += "<p>得分: " + autoData.score + "</p>";
         html += "<hr/>";

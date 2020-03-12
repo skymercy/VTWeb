@@ -88,6 +88,20 @@ class examAction extends baseAction
 		$renderData['end_date'] = date('Y-m-d', $instance->end_at);
 		$renderData['end_time'] = date('H:i',$instance->end_at);
 		$renderData['classes'] = examClassesDAO::getExistClassesData($instance->id);
+		$questions =  examQuestionDAO::newInstance()->filter(['exam_id'=>$id])->query();
+		foreach ($questions as &$question) {
+            $question['items'] = json_decode($question['items'], true);
+            $question['correct_items'] = [];
+            $question['type'] = question::getTypeName($question['type']);
+            foreach ($question['items'] as &$item) {
+                $item['alias'] = chr($item['sort']+65);
+                if ($item['is_correct']) {
+                    $question['correct_items'][] = $item['alias'] ;
+                }
+            }
+            $question['correct_items'] = implode(",", $question['correct_items']);
+        }
+		$renderData['questions'] = $questions;
 		return $this->json(['error'=>0,'data'=>$renderData,'classes'=>examClassesDAO::getClassesData($instance->course_id, $instance->id)]);
 	}
 	

@@ -27,7 +27,7 @@
 														<input name="ExamContent[<?=$question['id']?>]" type="radio" class="ace input-lg" value="<?=$item['id']?>"
 															<?php if (isset($existResultContent[$question['id']]) && $existResultContent[$question['id']] == $item['id']) {echo "checked='checked'";} ?>
 														/>
-														<span class="lbl bigger-120"><?=$item['title']?></span>
+														<span class="lbl bigger-120"><?=chr(65+$item['sort'])?>&nbsp;&nbsp;<?=$item['title']?></span>
 														<?=$item['content']?>
 													</label>
 												</div>
@@ -39,7 +39,7 @@
 														<input name="ExamContent[<?=$question['id']?>][]" type="checkbox" class="ace input-lg" value="<?=$item['id']?>"
 															<?php if (isset($existResultContent[$question['id']]) && in_array($item['id'], $existResultContent[$question['id']]->values(false)) ) {echo "checked='checked'";} ?>
 														/>
-														<span class="lbl bigger-120"><?=$item['title']?></span>
+														<span class="lbl bigger-120"><?=chr(65+$item['sort'])?>&nbsp;&nbsp;<?=$item['title']?></span>
 														<?=$item['content']?>
 													</label>
 												</div>
